@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-申请者-申请信息</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<script src="js/distpicker.data.js"></script>
+<script src="js/distpicker.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<!-- 模态框 -->
+<div class="modal fade" id="addApplication" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">申请场馆</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="modal-form-info">
+	            	<form class="form-inline" role="form" method="post" id="application_form">
+	            		<label>场馆名称</label> <input style="width:100px;" type="text" class="text" name="vname">
+	            		<label>场馆密码</label><input style="width:100px;" type="password" name="vpassword">
+	            		<p></p>
+	            		<label>所在省市</label>
+			        	<div id="distpicker1">
+					   		<select style="color:rgb(169,169,169);border-color: rgb(238,238,238);" name="province"></select>
+							<select style="color:rgb(169,169,169);border-color: rgb(238,238,238);" name="city"></select>
+							<select style="color:rgb(169,169,169);border-color: rgb(238,238,238);"  name="area"></select>
+						</div>
+						<label>场馆地址</label> <input type="text" class="text" name="address">
+						<p></p>
+						<label>VIP类座位排数</label> <input style="width:50px;" type="text" class="text" name="seatVipRowNum">
+						<label>VIP类座位列数</label> <input style="width:50px;" type="text" class="text" name="seatVipColNum">
+						<p></p>
+						<label>A类座位排数</label> <input style="width:50px;" type="text" class="text" name="seatARowNum">
+						<label>A类座位列数</label> <input style="width:50px;" type="text" class="text" name="seatAColNum">
+						<p></p>
+						<label>B类座位排数</label> <input style="width:50px;" type="text" class="text" name="seatBRowNum">
+						<label>B类座位列数</label> <input style="width:50px;" type="text" class="text" name="seatBColNum">
+						<p></p>
+						<label>C类座位排数</label> <input style="width:50px;" type="text" class="text" name="seatCRowNum">
+						<label>C类座位列数</label> <input style="width:50px;" type="text" class="text" name="seatCColNum">
+						<p></p>
+						<label>D类座位排数</label> <input style="width:50px;" type="text" class="text" name="seatDRowNum">
+						<label>D类座位列数</label> <input style="width:50px;" type="text" class="text" name="seatDColNum">
+						<div style="width:25%; margin:0 auto; text-align:middle;">
+            				<label class="hvr-sweep-to-right">
+				           		<input id="addApplicationBtn" type="button" value="提交申请">
+				    		</label>
+				    	</div>
+		            </form>
+	            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="applicationDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><b>场馆申请详情</b></h4>
+            </div>
+            <div class="modal-body">
+            	<div>
+            		<label>申请编号： </label><span id="vaid"></span>
+            		<label style="margin-left:20px;">申请状态： </label><span id="vaState"></span>
+            		<label style="margin-left:20px;">场馆名称： </label><span id="vname"></span>
+            		<p></p>
+            		<label>场馆密码： </label><span id="vPasswd"></span>
+            		<label style="margin-left:20px;">对应场馆编号： </label><span id="vid">无</span>
+            		<p></p>
+            		<label>所在省市： </label><span id="province"></span><span id="city"></span><span id="area"></span>
+					<label style="margin-left:20px;">场馆地址：</label><span id="address"></span>
+					<p></p>
+					<label>VIP类座位排数：</label><span id="seatVipRowNum"></span>
+					<label style="margin-left:20px;">VIP类座位列数：</label><span id="seatVipColNum"></span>
+					<p></p>
+					<label>A类座位排数：</label><span id="seatARowNum"></span>
+					<label style="margin-left:20px;">A类座位列数：</label><span id="seatAColNum"></span>
+					<p></p>
+					<label>B类座位排数：</label><span id="seatBRowNum"></span>
+					<label style="margin-left:20px;">B类座位列数：</label><span id="seatBColNum"></span>
+					<p></p>
+					<label>C类座位排数：</label><span id="seatCRowNum"></span>
+					<label style="margin-left:20px;">C类座位列数：</label><span id="seatCColNum"></span>
+					<p></p>
+					<label>D类座位排数：</label><span id="seatDRowNum"></span>
+					<label style="margin-left:20px;">D类座位列数：</label><span id="seatDColNum"></span>
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$("#distpicker1").distpicker({
+	autoSelect:false
+});
+</script>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>申请者</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>申请信息</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+        	<li><a href="venueApplicantPersonalSetting.html">个人设置</a></li>
+        	<li class="active"><a href="venueApplicantApply.html">申请信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>我的申请</label>
+        		<a href='#' data-toggle='modal' data-target='#addApplication' id="addApplicationHref"  style="margin-left:600px;">增加申请</a>
+   			</div>
+	    	<div class="panel-body" id="applicationInfo">
+	    	</div>
+		</div>
+	</div>
+</div>
+        
+<script>
+
+var vaid = 0;
+
+function getVaid(obj){
+	vaid = obj.getAttribute("id");
+}
+
+$(document).ready(function () {
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'A') {//申请者已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到申请者登录页面
+				window.location.href="/Tickets/home?pageId=12";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到申请者登录页面
+			window.location.href="/Tickets/home?pageId=12";
+		}
+	});
+	
+	//更新场馆申请信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/applicantShowApplicationList",
+		"type":"GET",
+		"dataType":"json",
+		"success": function(data){
+			if(data != "fail"){//场馆申请信息存在
+				var dataValue = eval(data);
+				var length = dataValue.length;
+	
+				var insertText = "";
+				for(var i=0; i<length; i++) {
+					insertText += "<a href='#' onclick='getVaid(this)' data-toggle='modal' data-target='#applicationDetail' class='list-group-item' id="+dataValue[i].vaid+">"+
+		 			"<h4 class='list-group-item-heading'>申请编号：<span>"+dataValue[i].vaid+"</span></h4>"+
+		 			"<label style='margin-top: 10px;'>申请场馆名：</label><span>"+dataValue[i].vname+"</span>"+
+		 			"<label style='margin-left: 20px;'>申请状态：</label><span>"+dataValue[i].vaState+"</span></a>";
+				}
+				document.getElementById('applicationInfo').innerHTML = insertText;
+			}
+			else {
+				document.getElementById('applicationInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">还没有场馆申请哦！</div>';
+			}
+		},
+		"error":function(data){
+			document.getElementById('applicationInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">还没有场馆申请哦！</div>';
+		}
+	});
+
+	//点击某一个场馆申请查看详情时的模态框事件
+	$('#applicationDetail').on('show.bs.modal', function () {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/applicantShowApplicationDetail",
+	        data:{"vaid":vaid},
+	        type:"POST",
+	        dataType:"json",
+	        async:false,
+	        success:function (data){
+	        	if(data != "fail"){//场馆开办申请信息存在
+		            var dataValue = eval(data);
+		            
+		            document.getElementById("vaid").innerHTML = dataValue.vaid;
+		            document.getElementById("vaState").innerHTML = dataValue.vaState;
+		            document.getElementById("vname").innerHTML = dataValue.vname;
+		            document.getElementById("vPasswd").innerHTML = dataValue.vPasswd;
+		            document.getElementById("vid").innerHTML = dataValue.vid;
+		            document.getElementById("province").innerHTML = dataValue.province;
+		            document.getElementById("city").innerHTML = dataValue.city;
+		            document.getElementById("area").innerHTML = dataValue.area;
+		            document.getElementById("address").innerHTML = dataValue.address;
+		            document.getElementById("seatVipRowNum").innerHTML = dataValue.seatVipRowNum;
+		            document.getElementById("seatVipColNum").innerHTML = dataValue.seatVipColNum;
+		            document.getElementById("seatARowNum").innerHTML = dataValue.seatARowNum;
+		            document.getElementById("seatAColNum").innerHTML = dataValue.seatAColNum;
+		            document.getElementById("seatBRowNum").innerHTML = dataValue.seatBRowNum;
+		            document.getElementById("seatBColNum").innerHTML = dataValue.seatBColNum;
+		            document.getElementById("seatCRowNum").innerHTML = dataValue.seatCRowNum;
+		            document.getElementById("seatCColNum").innerHTML = dataValue.seatCColNum;
+		            document.getElementById("seatDRowNum").innerHTML = dataValue.seatDRowNum;
+		            document.getElementById("seatDColNum").innerHTML = dataValue.seatDColNum;
+	        	}
+	        }
+	    });
+	});	
+
+	//当点击“增加场馆申请”时，模态框对应的操作
+	$('#addApplication').on('show.bs.modal', function() {
+		//这里不做任何操作
+	});
+	
+	//“提交申请”按钮点击事件
+	$('#addApplicationBtn').click(function() {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/applicantApplyVenue",
+	        type:"POST",
+	        data:$("#application_form").serialize(),
+	        success:function (data) {
+	        	if(data != "fail") {
+		        	alert("提交成功，场馆申请编号为"+data+"。请耐心等待集团经理审批。");
+		        }
+	        	else {
+	        		alert("提交失败");
+	        	}
+	        	setTimeout('jumpTo(15)',1000);
+	        }
+	    });
+	});
+	
+});
+
+function jumpTo(pageId) {
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-集团经理-统计信息</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>经理</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>统计信息</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+        	<li><a href="ticketsManagerCheckApplication.html">审批申请</a></li>
+        	<li><a href="ticketsManagerSettleIncome.html">结算收入</a></li>
+        	<li class="active"><a href="ticketsManagerStatistics.html">统计信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+			<div class="panel-heading">
+	       		<label>统计信息</label>
+	  		</div>
+	    	<div class="panel-body">
+	    		<div style="margin-bottom:10px;">
+	        		<label style="margin-right:10px;">场馆总数：</label><span class="text" id="totalVenue"></span>
+	        	</div>
+	        	<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">会员总数：</label><span class="text" id="totalMember"></span>
+				</div>
+				<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">集团盈利：</label><span class="text" id="profit"></span>元
+				</div>
+	    	</div>
+	    </div>
+	</div>
+</div>
+        
+
+<script type="text/javascript">
+$(document).ready(function () {
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'T') {//经理已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到经理登录页面
+				window.location.href="/Tickets/home?pageId=24";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到经理登录页面
+			window.location.href="/Tickets/home?pageId=24";
+		}
+	});
+
+	//更新集团统计信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/managerStatistics",
+		"type":"GET",
+		"dataType":"json",
+		"success": function(data){
+			if(data != "fail"){//集团统计信息存在
+				var dataValue = eval(data);
+				
+				document.getElementById('totalVenue').innerHTML = dataValue.venueTotalNum;
+				document.getElementById('totalMember').innerHTML = dataValue.memberTotalNum;
+				document.getElementById('profit').innerHTML = dataValue.profitMoney;
+			}
+		},
+		"error":function(data){
+		}
+	});
+	
+});
+</script>
+</body>
+</html>

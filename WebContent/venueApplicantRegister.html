@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-场馆申请者注册</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+	
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=3" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>会员登录/注册</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=16" id="havetochange2"><i class="glyphicon glyphicon-user"> </i>场馆登录/申请</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=24" id="havetochange3"><i class="glyphicon glyphicon-user"> </i>集团经理登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>申请者注册</h3>
+		<div class="login-top">
+			<div class="form-info">
+				<form method="post" id="register_form">
+					<input type="text" id="telephone" name="telephone" placeholder="手机号码">
+					<input type="password" id="password" name="password" placeholder="设置密码">
+					<div class="form-submit" id="register-submit">
+						<h5><a class="hvr-sweep-to-right">
+        					<input id="registerBtn" type="button" value="注册"></input>
+      					</a></h5>
+      				</div>
+				</form>
+				<div id="registerInfo"></div>
+			</div>
+			<div class="log">
+				<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="87.8%" color=#987cb9 SIZE=3>
+				<p>已经是Tickets的申请者？   → <a href="http://localhost:8080/Tickets/home?pageId=12">登录</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	$('#registerBtn').click(function(){
+		if($('#telephone').val() == undefined || $('#password').val() == undefined){
+			document.getElementById('registerInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">请填写完整注册信息！</div>';
+		}
+		else{
+			$.ajax({
+				url:"http://localhost:8080/Tickets/applicantRegister",
+				type:"POST",
+				data:$("#register_form").serialize(),
+				success:function(data){
+					if(data != "fail"){//注册成功，给出成功提示
+						document.getElementById('registerInfo').innerHTML='<div class="alert alert-success" role="alert" style="text-align: center">注册成功!您的申请者编号为'+data+'。3秒后将跳转至登录界面……</div>';
+						setTimeout('jumpTo(12)',3000);//跳转至登录界面
+					}
+					else {//注册失败，给出错误提示
+						document.getElementById('registerInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">注册失败！该手机号码已被注册。</div>';
+					}
+				}
+			});
+		}
+	});
+});
+
+function jumpTo(pageId){
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-网站首页</title>
+
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<script src="js/responsiveslides.min.js"></script>
+   <script>
+    $(function () {
+      $("#slider").responsiveSlides({
+      	auto: true,
+      	speed: 500,
+        namespace: "callbacks",
+        pager: true,
+      });
+    });
+  </script>
+</head>
+
+<body >
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=3" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>会员登录/注册</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=16" id="havetochange2"><i class="glyphicon glyphicon-user"> </i>场馆登录/申请</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=24" id="havetochange3"><i class="glyphicon glyphicon-user"> </i>集团经理登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="header-right">
+	<div class="banner">
+		 <div class="slider">
+		    <div class="callbacks_container">
+		      <ul class="rslides" id="slider">		       
+				 <li>
+		          	 <div class="banner1"></div>
+		         </li>
+				 <li>
+		          	 <div class="banner2"></div>
+		         </li>
+		         <li>
+		          	 <div class="banner3"></div>
+		         </li>		
+		      </ul>
+		  </div>
+		</div>
+	</div>
+</div>
+	
+<div class="banner-bottom-top">
+	<div class="container">
+		<div class="bottom-header">
+			<div class="header-bottom">
+				<div class="bottom-head">
+					<a href="http://localhost:8080/Tickets/home?pageId=1">
+						<div class="buy-media">
+							<i class="buy"></i>
+							<h6>加入会员</h6>
+						</div>
+					</a>
+				</div>
+				<div class="bottom-head">
+					<a href="http://localhost:8080/Tickets/home?pageId=5">
+						<div class="buy-media">
+							<i class="pg"></i>
+							<h6>我的信息</h6>
+						</div>
+					</a>
+				</div>
+				<div class="bottom-head">
+					<a href="http://localhost:8080/Tickets/home?pageId=7">
+						<div class="buy-media">
+							<i class="rent"></i>
+							<h6>预订演出</h6>
+						</div>
+					</a>
+				</div>
+
+				<div class="bottom-head">
+					<a href="http://localhost:8080/Tickets/home?pageId=12">
+						<div class="buy-media">
+							<i class="sell"></i>
+							<h6>开办分馆</h6>
+						</div>
+					</a>
+				</div>
+				<div class="bottom-head">
+					<a href="http://localhost:8080/Tickets/home?pageId=18">
+						<div class="buy-media">
+							<i class="loan"></i>
+							<h6>我的场馆</h6>
+						</div>
+					</a>
+				</div>
+				<div class="bottom-head">
+					<a href="http://localhost:8080/Tickets/home?pageId=19">
+						<div class="buy-media">
+							<i class="apart"></i>
+							<h6>发布演出</h6>
+						</div>
+					</a>
+				</div>
+				<div class=" bottom-head">
+					<a href="http://localhost:8080/Tickets/home?pageId=25">
+						<div class="buy-media">
+							<i class="deal"> </i>
+							<h6>管理集团</h6>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function () {
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'M') {//会员已经登录
+					document.getElementById('havetochange1').innerHTML = '<i class="glyphicon glyphicon-user"> </i>会员';
+				}
+				else if(firstChar == 'A') {//申请者已经登录
+					document.getElementById('havetochange1').innerHTML = '<i class="glyphicon glyphicon-user"> </i>申请者';
+				}
+				else if(firstChar == 'V') {//场馆已经登录
+					document.getElementById('havetochange1').innerHTML = '<i class="glyphicon glyphicon-user"> </i>场馆';
+				}
+				else if(firstChar == 'T') {//集团经理已经登录
+					document.getElementById('havetochange1').innerHTML = '<i class="glyphicon glyphicon-user"> </i>经理';
+				}
+				
+				document.getElementById('havetochange2').innerHTML = superId;
+				document.getElementById('havetochange3').innerHTML = '退出登录';
+				$('#havetochange1').attr('href','');
+				$('#havetochange2').attr('href','');
+				$('#havetochange3').attr('href','http://localhost:8080/Tickets/logout');
+			}
+		},
+		"error":function(data) {
+		}
+	});
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-会员-票务预订</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>会员</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>票务预订</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+        	<li><a href="memberPersonalSetting.html">个人设置</a></li>
+        	<li><a href="memberCardInfo.html">会员卡信息</a></li>
+        	<li class="active"><a href="memberSearchPerformance.html">票务预订</a></li>
+        	<li><a href="memberManageOrder.html">订单管理</a></li>
+        	<li><a href="memberStatistics.html">统计信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>演出信息</label>
+   			</div>
+	    	<div class="panel-body">
+	    		<div id="performanceInfo">
+		    		<label >演出名称：</label><span id="perName"></span>
+		    		<label style="margin-left:20px;">演出简介：</label><span id="briefIntro"></span>
+	           		<p></p>
+	           		<label>演出场馆：</label><span id="perVenue"></span>
+	           		<label style="margin-left:20px;">演出类型：</label><span id="perCategory"></span>
+	           		<p></p>
+	           		<label>开始时间：</label><span id="startTime"></span>
+	           		<label style="margin-left:20px;">结束时间：</label><span id="endTime"></span>
+	           		<p></p>
+	           		<label>VIP座位价格：</label><span id="vipSeatPrice"></span>元/人
+	           		<label style="margin-left:20px;">A类座位价格：</label><span id="ASeatPrice"></span>元/人
+	           		<label style="margin-left:20px;">B类座位价格：</label><span id="BSeatPrice"></span>元/人
+	           		<p></p>
+	           		<label>C类座位价格：</label><span id="CSeatPrice"></span>元/人
+	           		<label style="margin-left:20px;">D类座位价格：</label><span id="DSeatPrice"></span>元/人
+	           		<p></p>
+	    		</div>
+	    	</div>
+		</div>
+		<div class="clearfix" style="height:2em;"></div>
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+			<div class="panel-heading">
+        		<label>购票选项</label>
+   			</div>
+	    	<div class="panel-body">
+	    		<div>
+		    		<div style="margin-bottom:20px;">
+						<label style="margin-right:10px;">座位类型</label>
+						<div id="buyCategory">
+							<label class="checkbox-inline">
+								<input type="radio" name="seatCategory" id="optionsRadios1" value="V">VIP类座位
+							</label>
+							<label class="checkbox-inline">
+						    	<input type="radio" name="seatCategory" id="optionsRadios2" value="A">A类座位
+						    </label>
+						    <label class="checkbox-inline">
+						    	<input type="radio" name="seatCategory" id="optionsRadios3" value="B">B类座位
+						    </label>
+						    <label class="checkbox-inline">
+								<input type="radio" name="seatCategory" id="optionsRadios4" value="C">C类座位
+							</label>
+							<label class="checkbox-inline">
+						    	<input type="radio" name="seatCategory" id="optionsRadios5" value="D">D类座位
+						    </label>
+						</div>
+					</div>
+					<div style="margin-bottom:20px;">
+						<label style="margin-right:10px;">购票选项</label>
+						<div id="buyCategory">
+							<label class="checkbox-inline">
+								<input type="radio" name="buyCategory" id="optionsRadios1" value="S">选座购买（最多可购6张）
+							</label>
+							<label class="checkbox-inline">
+						    	<input type="radio" name="buyCategory" id="optionsRadios2" value="R">不选座购买（最多可购20张）
+						    </label>
+						</div>
+					</div>
+					<div style="margin-bottom:20px;" id="choiceDetail">
+					</div>
+					<div style="margin-bottom:20px;" id="buyInfo">
+					</div>
+	    		</div>
+	    	</div>
+		</div>
+	</div>
+</div>
+        
+<script>
+
+//获取上一个页面传来的演出编号的变量值
+var thisURL = document.URL;  
+var ppid = (thisURL.split('?')[1]).split("=")[1];  
+
+//记录空座位数量的变量
+var emptySeatNum = 0;
+
+//“选票购买”按钮点击事件
+function buyWithChoice() {
+	//被选中的座位类型
+	var seatVal = $('input:radio[name="seatCategory"]:checked').val(); 
+	
+	//被选中的座位列表
+	var selectedSeats = new Array();
+	 $(':input[type=checkbox][name=emptySeat]:checked').each(function() {
+	 	selectedSeats.push($(this).val());
+	 });
+
+	if(selectedSeats.length == 0) {//用户没有选择要购买的座位
+		document.getElementById('buyInfo').innerHTML='<div class="alert alert-danger" role="alert"style="text-align: center">请选择您要购买的座位！</div>';		
+	}
+	else if(selectedSeats.length > 6) {
+		document.getElementById('buyInfo').innerHTML='<div class="alert alert-danger" role="alert"style="text-align: center">最多可以购买6张！</div>';		
+	}
+	else if(selectedSeats.length > emptySeatNum) {
+		document.getElementById('buyInfo').innerHTML='<div class="alert alert-danger" role="alert"style="text-align: center">无足够的余票！请填写不超过余票数量的数值！</div>';		
+	}
+	else {//用户选择了要购买的座位
+		$.ajax({
+	        url:"http://localhost:8080/Tickets/memberBuyTicket",
+	        type:"POST",
+	        data:{"ppid":ppid, "buyCategory":"S", "seatCategory":seatVal, "selectedSeats":selectedSeats.join(",")},
+	        success:function (data){
+	        	if(data != "fail") {//购买成功
+	        		document.getElementById('buyInfo').innerHTML='<div class="alert alert-success" role="alert"style="text-align: center">购买成功!订单编号为'+data+'。即将跳转至支付页面……</div>';		
+	        		window.location.href="memberPayOrder.html?oid="+data;
+	        	}
+	        	else {//购买失败
+	        		document.getElementById('buyInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">购买失败！</div>';
+	        	}
+	        }
+		});  
+	}
+}
+
+//“不选票购买”按钮点击事件
+function buyWithoutChoice() {
+	
+	//被选中的座位类型
+	var seatVal = $('input:radio[name="seatCategory"]:checked').val(); 
+	
+	//购买的座位张数
+	var seatNum = $('#buySeatNum').val();
+	if(seatNum <=0) {//用户购买的张数小于0
+		document.getElementById('buyInfo').innerHTML='<div class="alert alert-danger" role="alert"style="text-align: center">请填写合理的购买张数！</div>';		
+	}
+	else if(seatNum > 20) {
+		document.getElementById('buyInfo').innerHTML='<div class="alert alert-danger" role="alert"style="text-align: center">最多可以购买20张！</div>';		
+	}
+	else if(seatNum > emptySeatNum) {
+		document.getElementById('buyInfo').innerHTML='<div class="alert alert-danger" role="alert"style="text-align: center">无足够的余票！请填写不超过余票数量的数值！</div>';		
+	}
+	
+	else {
+		$.ajax({
+	        url:"http://localhost:8080/Tickets/memberBuyTicket",
+	        type:"POST",
+	        data:{"ppid":ppid, "buyCategory":"R", "seatCategory":seatVal, "seatNum":seatNum},
+	        success:function (data){
+	        	if(data != "fail") {//购买成功
+	        		document.getElementById('buyInfo').innerHTML='<div class="alert alert-success" role="alert"style="text-align: center">购买成功!订单编号为'+data+'。即将跳转至支付页面……</div>';		
+	        		window.location.href="memberPayOrder.html?oid="+data;
+	        	}
+	        	else {//购买失败
+	        		document.getElementById('buyInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">购买失败！</div>';
+	        	}
+	        }
+		});  
+	}
+}
+
+$(document).ready(function () {
+
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'M') {//会员已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到会员登录页面
+				window.location.href="/Tickets/home?pageId=3";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到会员登录页面
+			window.location.href="/Tickets/home?pageId=3";
+		}	
+	});
+	
+	//更新演出信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/showPerformancePlanDetail",
+		"type":"POST",
+		"data":{"ppid":ppid},
+		"dataType":"json",
+		"success": function(data) {
+			if(data != "fail") {//演出信息存在
+        		var dataValue = eval(data);
+				
+				document.getElementById('perName').innerHTML = dataValue.ppname;
+				document.getElementById('briefIntro').innerHTML = dataValue.briefIntro;
+				document.getElementById('perVenue').innerHTML = dataValue.vname;
+				document.getElementById('perCategory').innerHTML = dataValue.category;
+				document.getElementById('startTime').innerHTML = dataValue.startTime;
+				document.getElementById('endTime').innerHTML = dataValue.endTime;
+				document.getElementById('vipSeatPrice').innerHTML = dataValue.seatVipPrice;
+				document.getElementById('ASeatPrice').innerHTML = dataValue.seatAPrice;
+				document.getElementById('BSeatPrice').innerHTML = dataValue.seatBPrice;
+				document.getElementById('CSeatPrice').innerHTML = dataValue.seatCPrice;
+				document.getElementById('DSeatPrice').innerHTML = dataValue.seatDPrice;
+			}
+		},
+		"error":function(data) {
+		}
+	});
+	
+	//给购票选项加监听事件
+	$('input[type=radio][name=seatCategory]').change(function() {//当“座位类型”被选中项有更新时
+    	var seatVal = $('input:radio[name="seatCategory"]:checked').val();//获取选中的座位类型的值
+		var buyVal = $('input:radio[name="buyCategory"]:checked').val();//获取选中的购买类型的值
+        if(buyVal != null) {//如果“购买类型”已有被选中项
+        	if(buyVal == 'S') {//如果用户选择了选座购买
+        		$.ajax({
+        	        url:"http://localhost:8080/Tickets/showEmptySeatsOfAPerformance",
+        	        type:"POST",
+        	        data:{"ppid":ppid, "seatCategory":seatVal},
+        	        "dataType":"json",
+        	        success:function (data){
+        	        	if(data != "fail") {//空座位信息存在
+        	        		var dataValue = eval(data);
+        	        		emptySeatNum = dataValue.length;
+        					
+        					var insertText = "<div id='emptySeat'>";
+        					for(var i=0; i<emptySeatNum;i++) {//将每个空座位信息加入多选框列表中
+        						insertText += "<input type='checkbox' name='emptySeat' id='optionCheckBox"+i+"' value='"+dataValue[i].row+"排"+dataValue[i].col+"座' style='margin-left:5px;'>"+dataValue[i].row+"排"+dataValue[i].col+"座";
+        					}
+        					insertText += '<div class="form-submit" id="login-submit"><h5><a class="hvr-sweep-to-right"><input type="button" onclick="buyWithChoice()" value="购买"></input></a></h5></div>';
+        					document.getElementById('choiceDetail').innerHTML = insertText;
+        				}
+        				else{
+        					document.getElementById('choiceDetail').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">没有对应的空座位！</div>';
+        	        	}
+        	        }
+        	    });
+        	}
+        	else {//如果用户选择了不选座购买
+        		$.ajax({
+        	        url:"http://localhost:8080/Tickets/showEmptySeatsOfAPerformance",
+        	        type:"POST",
+        	        data:{"ppid":ppid, "seatCategory":seatVal},
+        	        "dataType":"json",
+        	        success:function (data){
+        	        	if(data != "fail") {//空座位信息存在
+        	        		var dataValue = eval(data);
+        					emptySeatNum = dataValue.length;
+        					
+        					document.getElementById('choiceDetail').innerHTML = '<div><label>当前座位余票还有'+emptySeatNum+'张</label></div><div>购买张数：<input type="text" id="buySeatNum" name="buySeatNum"></div>'+
+        																		 '<div class="form-submit" id="login-submit"><h5><a class="hvr-sweep-to-right"><input type="button" onclick="buyWithoutChoice()" value="购买"></input></a></h5></div>';
+        				}
+        				else{
+        					document.getElementById('choiceDetail').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">没有对应的空座位！</div>';
+        	        	}
+        	        }
+        	    });
+        	}
+        }   
+    });
+	
+	$('input[type=radio][name=buyCategory]').change(function() {//当“购买类型”被选中项有更新时
+		var seatVal = $('input:radio[name="seatCategory"]:checked').val();//获取选中的座位类型的值
+		var buyVal = $('input:radio[name="buyCategory"]:checked').val();//获取选中的购买类型的值
+        if(seatVal != null) {//如果“座位类型”已有被选中项
+        	var buyVal = $('input:radio[name="buyCategory"]:checked').val();
+        	if(buyVal == 'S') {//如果用户选择了选座购买
+        		$.ajax({
+        	        url:"http://localhost:8080/Tickets/showEmptySeatsOfAPerformance",
+        	        type:"POST",
+        	        data:{"ppid":ppid, "seatCategory":seatVal},
+        	        "dataType":"json",
+        	        success:function (data){
+        	        	if(data != "fail") {//空座位信息存在
+        	        		var dataValue = eval(data);
+        					emptySeatNum = dataValue.length;
+        					
+        					var insertText = "<div id='emptySeat'>";
+        					for(var i=0; i<emptySeatNum;i++) {//将每个空座位信息加入多选框列表中
+        						insertText += "<input type='checkbox' name='emptySeat' id='optionCheckBox"+i+"' value='"+dataValue[i].row+"排"+dataValue[i].col+"座' style='margin-left:5px;'>"+dataValue[i].row+"排"+dataValue[i].col+"座";
+        					}
+        					insertText += '<div class="form-submit" id="login-submit"><h5><a class="hvr-sweep-to-right"><input type="button" onclick="buyWithChoice()" value="购买"></input></a></h5></div>';
+        					document.getElementById('choiceDetail').innerHTML = insertText;
+        				}
+        				else{
+        					document.getElementById('choiceDetail').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">没有对应的空座位！</div>';
+        	        	}
+        	        }
+        	    });
+        	}
+        	else {//如果用户选择了不选座购买
+        		$.ajax({
+        	        url:"http://localhost:8080/Tickets/showEmptySeatsOfAPerformance",
+        	        type:"POST",
+        	        data:{"ppid":ppid, "seatCategory":seatVal},
+        	        "dataType":"json",
+        	        success:function (data){
+        	        	if(data != "fail") {//空座位信息存在
+        	        		var dataValue = eval(data);
+        					emptySeatNum = dataValue.length;
+        					
+        					document.getElementById('choiceDetail').innerHTML = '<div><label>当前座位余票还有'+emptySeatNum+'张</label></div><div>购买张数：<input type="text" id="buySeatNum" name="buySeatNum"></div>'+
+        																		 '<div class="form-submit" id="login-submit"><h5><a class="hvr-sweep-to-right"><input type="button" onclick="buyWithoutChoice()"  value="购买"></input></a></h5></div>';
+        				}
+        				else{
+        					document.getElementById('choiceDetail').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">没有对应的空座位！</div>';
+        	        	}
+        	        }
+        	    });
+        	}
+        }
+    });
+	
+});
+</script>
+</body>
+</html>

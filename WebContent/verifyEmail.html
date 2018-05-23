@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-验证邮箱</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+	
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=3" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>会员登录/注册</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=16" id="havetochange2"><i class="glyphicon glyphicon-user"> </i>场馆登录/申请</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=24" id="havetochange3"><i class="glyphicon glyphicon-user"> </i>集团经理登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>验证邮箱</h3>
+		<div class="login-top">
+			<div  class="form-info">
+				<p>我们已经往你的注册邮箱<span id="email"></span>中发了邮件，里面含有6位验证码，请在下方的输入框中输入验证码以激活账户 </p>
+			</div>
+			<div class="form-info">
+				<form method="post" id="verify_form">
+					<input type="text" id="vCode" name="vCode" placeholder="6位验证码">
+					<div class="form-submit" id="verify-submit">
+						<h5><a class="hvr-sweep-to-right">
+        					<input id="verifyBtn" type="button" value="验证邮箱"></input>
+      					</a></h5>
+      				</div>
+				</form>
+				<div id="verifyInfo"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	$('#verifyBtn').click(function() {
+		if($('#vCode').val() == undefined || $('#vCode').val() == ""){
+			document.getElementById('verifyInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">请填写验证码！</div>';
+		}
+		else {
+			$.ajax({
+				url:"http://localhost:8080/Tickets/memberVerifyEmail",
+				type:"POST",
+				data:{"vCode":$('#vCode').val()},
+				success:function(data){
+					if(data != "fail"){//验证成功，给出成功提示
+						document.getElementById('verifyInfo').innerHTML='<div class="alert alert-success" role="alert"style="text-align: center">验证成功！会员编号为'+data+'。3秒后将跳转至会员登录界面……</div>';
+						setTimeout('jumpTo(3)',3000);//跳转至会员登录界面
+					}
+					else {//验证失败，给出错误提示
+						document.getElementById('verifyInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">验证失败，验证码不正确。 </div>';
+					}
+				}
+			});
+		}
+	});
+});
+
+function jumpTo(pageId) {
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-申请者-个人设置</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<!-- 模态框 -->
+<div class="modal fade" id="modifyRgtInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">注册信息</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="form-info">
+	            	<form class="form-inline" role="form" method="post" id="rgtInfo_form">
+			        	<label>申请者编号：</label>
+			        	<span class="text" id="vaerid"></span>
+	            		<p></p>
+	            		<label>联系电话：</label>
+	            		<span class="text" id="telephone"></span>
+						<p></p>
+						<label>新的密码</label>
+		            	<input class="form-control" type="password" id="passwd1">
+						<p></p>
+						<label>确认密码</label>
+		            	<input class="form-control" type="password" id="passwd2">
+		            	<p></p>
+					    <div style="width:20%; margin:0 auto; text-align:middle;">
+            				<label class="hvr-sweep-to-right">
+				           		<input id="modifyRgtInfoBtn" type="button" value="确定">
+				    		</label>
+				    	</div>
+					    <div id="modifyRgtInfoInfo"></div>
+	            	</form>
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>申请者</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>个人设置</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+        	<li class="active"><a href="venueApplicantPersonalSetting.html">个人设置</a></li>
+        	<li><a href="venueApplicantApply.html">申请信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>注册信息</label>
+        		<a href='#' data-toggle='modal' data-target='#modifyRgtInfo' id="modifyRgtInfoHref"  style="margin-left:560px;">修改注册信息</a>
+   			</div>
+	    	<div class="panel-body">
+	    		<div style="margin-bottom:10px;">
+	        		<label style="margin-right:10px;">申请者编号：</label><span class="text" id="vaerid_show"></span>
+	        	</div>
+	        	<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">联系电话：</label><span class="text" id="telephone_show"></span>
+				</div>
+				<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">登录密码：</label><span class="password" id="vaerPassword_show"></span>
+				</div>
+	    	</div>
+		</div>
+	</div>
+</div>
+        
+<script>
+$(document).ready(function () {
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'A') {//申请者已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到申请者登录页面
+				window.location.href="/Tickets/home?pageId=12";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到申请者登录页面
+			window.location.href="/Tickets/home?pageId=12";
+		}
+	});
+
+	//更新注册信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/applicantShowApplicantDetail",
+		"type":"GET",
+		"dataType":"json",
+        "async":false,
+		"success": function(data) {
+			if(data != "fail") {//申请者个人信息存在
+				var dataValue = eval(data);
+				
+				document.getElementById('vaerid_show').innerHTML = dataValue.vaerid;
+				document.getElementById('telephone_show').innerHTML = dataValue.telephone;
+				document.getElementById('vaerPassword_show').innerHTML = dataValue.vaerPasswd;
+			}
+		},
+		"error":function(data) {
+		}
+	});
+	
+	//当点击“修改注册信息”时，模态框对应的操作
+	$('#modifyRgtInfo').on('show.bs.modal', function() {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/applicantShowApplicantDetail",
+	        "type":"GET",
+			"dataType":"json",
+	        "async":false,
+	        success:function (data){
+	        	if(data != "fail") {//申请者个人信息存在
+					var dataValue = eval(data);
+					
+					document.getElementById('vaerid').innerHTML = dataValue.vaerid;
+					document.getElementById('telephone').innerHTML = dataValue.telephone;
+	        	}
+	        }
+	    });
+	});	
+
+	//“修改注册信息”按钮点击事件
+	$('#modifyRgtInfoBtn').click(function() {
+		if($('#passwd1').val() == undefined || $('#passwd2').val() == undefined) {
+			document.getElementById('modifyRgtInfoInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">请填写完整的新密码！</div>';
+		}
+		else if($('#passwd1').val() != $('#passwd2').val()) {
+			document.getElementById('modifyRgtInfoInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">请保证两次输入的密码一致！</div>';
+		}
+		else{
+		    $.ajax({
+		        url:"http://localhost:8080/Tickets/applicantResetPassword",
+		        type:"POST",
+		        data:{"passwd":$('#passwd1').val()},
+		        success:function (data) {
+		        	if(data == "success") {
+			        	alert("修改成功");
+			        }
+		        	else {
+		        		alert("修改失败,"+data);
+		        	}
+		        	setTimeout('jumpTo(14)',2000);
+		        }
+		    });
+		}
+	});
+	
+});
+
+function jumpTo(pageId) {
+    window.location.href="/Tickets/home?pageId="+pageId;
+}	
+</script>
+</body>
+</html>

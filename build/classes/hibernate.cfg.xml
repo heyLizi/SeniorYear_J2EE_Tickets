@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+ <session-factory name="">
+ 
+  <property name="hibernate.connection.username">root</property>
+  <property name="hibernate.connection.password">root</property>
+  <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+  <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/tickets?useUnicode=true&amp;characterEncoding=UTF-8</property>
+  <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+  <property name="hibernate.use_outer_join">true</property>
+  <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+  <property name="hibernate.hbm2ddl.auto">update</property>
+  <property name="hibernate.show_sql">true</property>
+  <property name="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</property>
+  <mapping class="po.CouponBean"/>
+  <mapping class="po.CouponRuleBean"/>
+  <mapping class="po.MemberBean"/>
+  <mapping class="po.MemberCardBean"/>
+  <mapping class="po.MemberPayBean"/>
+  <mapping class="po.MemberRuleBean"/>
+  <mapping class="po.OrderBean"/>
+  <mapping class="po.OrderPayBean"/>
+  <mapping class="po.PayAccountBean"/>
+  <mapping class="po.PerformancePlanBean"/>
+  <mapping class="po.RefundBean"/>
+  <mapping class="po.RefundRuleBean"/>
+  <mapping class="po.SettleIncomeBean"/>
+  <mapping class="po.SettleRuleBean"/>
+  <mapping class="po.SoldSeatBean"/>
+  <mapping class="po.TicketsInfoBean"/>
+  <mapping class="po.VenueAccountBean"/>
+  <mapping class="po.VenueApplicantBean"/>
+  <mapping class="po.VenueApplicationBean"/>
+  <mapping class="po.VenueBean"/>
+  <mapping class="po.VenueUpdateBean"/>
+  <mapping class="po.VerifyEmailBean"/>
+ </session-factory>
+</hibernate-configuration>

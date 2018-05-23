@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-会员-会员卡信息</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<!-- 模态框 -->
+<div class="modal fade" id="cancelCard" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">停止会员卡</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="form-info">
+	            	<form class="form-inline" role="form" method="post" id="cancel_form">
+			        	<label>取消会员资格后，会员等级将降为0，积分清零，购票不享受优惠与积分</label>
+			        	<label>您确定停止会员卡、取消会员资格？（确定请点击以下的“停止会员卡”）</label>
+						<p></p>
+					    <div style="width:20%; margin:0 auto; text-align:middle;">
+            				<label class="hvr-sweep-to-right">
+				           		<input id="cancelBtn" type="button" value="停止会员卡">
+				    		</label>
+				    	</div>
+					    <div id="cancelInfo"></div>
+	            	</form>
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="redeemCoupon" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">兑换优惠券</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="form-info">
+	            	<form class="form-inline"  role="form" method="post" id="redeem_form">
+			        	<label>您现有积分：</label>
+			        	<span id="credit"></span>
+	            		<p></p>
+	            		<label>兑换选项</label>
+	            		<div id="redeemCategory">
+							<label class="checkbox-inline">
+								<input type="radio" name="redeemCategory" id="optionsRadios1" value="500">500积分兑换10元优惠券
+							</label>
+							<label class="checkbox-inline">
+						    	<input type="radio" name="redeemCategory" id="optionsRadios2" value="1000">1000积分兑换25元优惠券
+						    </label>
+						    <label class="checkbox-inline">
+								<input type="radio" name="redeemCategory" id="optionsRadios3" value="1500">1500积分兑换40元优惠券
+							</label>
+							<label class="checkbox-inline">
+						    	<input type="radio" name="redeemCategory" id="optionsRadios4" value="2000">2000积分兑换60元优惠券
+						    </label>
+						    <label class="checkbox-inline">
+								<input type="radio" name="redeemCategory" id="optionsRadios5" value="2500">2500积分兑换90元优惠券
+							</label>
+						</div>
+						<p></p>
+					    <div style="width:20%;margin:0 auto;text-align:middle;">
+            				<label class="hvr-sweep-to-right">
+				           		<input id="redeemBtn" type="button" value="兑换">
+				    		</label>
+				    	</div>
+					    <div id="infor"></div>
+	            	</form>
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>会员</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>会员卡信息</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+    		<li><a href="memberPersonalSetting.html">个人设置</a></li>
+        	<li class="active"><a href="memberCardInfo.html">会员卡信息</a></li>
+        	<li><a href="memberSearchPerformance.html">票务预订</a></li>
+        	<li><a href="memberManageOrder.html">订单管理</a></li>
+        	<li><a href="memberStatistics.html">统计信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>会员卡信息</label>
+        		<a href='#' data-toggle='modal' data-target='#cancelCard' id="cancelCardHref"  style="margin-left:520px;">停止/取消会员卡</a>
+   			</div>
+	    	<div class="panel-body">
+	    		<div style="margin-bottom:10px;">
+	        		<label style="margin-right:10px;">会员等级：</label><span id="mlevel_show" class="text"></span>
+	        	</div>
+	        	<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">消费总额：</label><span id="totalPay_show" class="text"></span>元
+				</div>
+	        	<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">会员积分：</label><span id="credit_show" class="text"></span>分
+				</div>
+	        	<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">优惠折扣：</label><span id="discount_show" class="text"></span>
+				</div>
+				<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">积分规则：</label>每消费1元积<span id="creditRule_show" class="text"></span>分
+				</div>
+	    	</div>
+		</div>
+		<div class="clearfix" style="height:2em;"></div>
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>可用优惠券</label>
+        		<a href='#' data-toggle='modal' data-target='#redeemCoupon' id="redeemCouponHref" style="margin-left:560px;">兑换优惠券</a>
+   			</div>
+	    	<div class="panel-body" id="couponInfo">
+	    	</div>
+		</div>
+	</div>
+</div>
+        
+<script>
+$(document).ready(function () {
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'M') {//会员已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到会员登录页面
+				window.location.href="/Tickets/home?pageId=3";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到会员登录页面
+			window.location.href="/Tickets/home?pageId=3";
+		}
+	});
+	
+	//更新会员卡信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/memberShowCardDetail",
+		"type":"GET",
+		"dataType":"json",
+        "async":false,
+		"success": function(data) {
+			if(data != "fail") {//会员卡信息存在
+				var dataValue = eval(data);
+				
+				document.getElementById('mlevel_show').innerHTML = dataValue.level;
+				document.getElementById('totalPay_show').innerHTML = dataValue.totalPay;
+				document.getElementById('credit_show').innerHTML = dataValue.credit;
+				document.getElementById('discount_show').innerHTML = dataValue.discount;
+				document.getElementById('creditRule_show').innerHTML = dataValue.creditRule;
+			}
+		},
+		"error":function(data) {
+		}
+	});
+	
+	//更新优惠券信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/memberShowCouponList",
+		"type":"GET",
+		"dataType":"json",
+        "async":false,
+		"success": function(data) {
+			if(data != "fail") {//优惠券信息存在
+				var dataValue = eval(data);
+				var length = dataValue.length;
+				
+				var insertText = "";
+				for(var i=0; i<length;i++) {//将每个优惠券信息加入列表中
+					insertText += "<div class='list-group-item'><label>优惠券金额：</label><span>"+dataValue[i].cpnMoney+"</span>元"+
+		 			"<label style='margin-left:20px;'>使用条件：</label>满<span>"+dataValue[i].cpnMoney+"</span>元可用</div>";
+				}
+				document.getElementById('couponInfo').innerHTML = insertText;
+			}
+			else{
+				document.getElementById('couponInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">还没有可用优惠券！</div>';
+			}
+		},
+		"error":function(data) {
+			document.getElementById('couponInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">还没有可用优惠券！</div>';
+		}
+	});
+	
+	//当点击“停止/取消会员卡”时，模态框对应的操作
+	$('#cancelCard').on('show.bs.modal', function() {
+	    /*这里不做任何操作*/
+	});	
+	
+	//“停止会员卡”按钮点击事件
+	$('#cancelBtn').click(function() {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/memberStopCard",
+	        type:"GET",
+	        success:function (data){
+	        	if(data == "success") {
+		        	alert("停止会员卡成功");
+		        }
+	        	else {
+	        		alert("停止会员卡失败，"+data);
+	        	}
+	        	setTimeout('jumpTo(6)',1000);
+	        }
+	    });
+	});
+	
+	//当点击“兑换优惠券”时，模态框对应的操作
+	$('#redeemCoupon').on('show.bs.modal', function() {
+		$.ajax({
+			url:"http://localhost:8080/Tickets/memberShowCardDetail",
+			"type":"GET",
+			"dataType":"json",
+	        "async":false,
+			"success": function(data) {
+				if(data != "fail") {//会员卡信息存在
+					var dataValue = eval(data);
+				
+					document.getElementById('credit').innerHTML = dataValue.credit;
+					//将单选框中大于会员现有积分值的兑换选项设为不可点击
+					var arr = document.getElementsByName("redeemCategory");
+					var disabledCount = 0;
+					for(var i=0; i<arr.length; i++){
+						var thisCreditValue = arr[i].value;
+						if(thisCreditValue > dataValue.credit) {
+							arr[i].disabled = true;
+							disabledCount += 1;
+						}
+					}
+					
+					//当所有的单选框都不可点击时，将“兑换优惠券”按钮设置为不可点击
+					if(disabledCount == arr.length){
+						document.getElementById('redeemBtn').disabled = true;
+					}
+				}
+			},
+			"error":function(data) {
+			}
+		});
+	});	
+	
+	//“兑换优惠券”按钮点击事件
+	$('#redeemBtn').click(function() {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/memberRedeemCoupon",
+	        type:"POST",
+	        data:$('#redeem_form').serialize(),
+	        success:function (data){
+	        	if(data == "success") {
+		        	alert("兑换成功");
+		        }
+	        	else {
+	        		alert("兑换失败，"+data);
+	        	}
+	        	setTimeout('jumpTo(6)',1000);
+	        }
+	    });
+	});
+});
+
+function jumpTo(pageId){
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+
+</script>
+</body>
+</html>

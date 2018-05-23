@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-会员-票务预订</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-datetimepicker.js"></script>
+<script src="js/bootstrap-datetimepicker.fr.js"></script>
+<script src="js/moment.js"></script>
+<script src="js/distpicker.data.js"></script>
+<script src="js/distpicker.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>会员</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>演出查询</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+        	<li><a href="memberPersonalSetting.html">个人设置</a></li>
+        	<li><a href="memberCardInfo.html">会员卡信息</a></li>
+        	<li class="active"><a href="memberSearchPerformance.html">票务预订</a></li>
+        	<li><a href="memberManageOrder.html">订单管理</a></li>
+        	<li><a href="memberStatistics.html">统计信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<form method="post" id="search_form" style="width:80%; margin:auto;">
+			<div style="margin-bottom:20px;">
+	       		<label style="margin-right:10px;">友情提示：用户只能搜索并购买距当前时间不足14天的演出</label>
+	       	</div>
+			<div style="margin-bottom:20px;">
+	       		<label style="margin-right:10px;">所在地区</label>
+	       		<div id="distpicker1">
+			   		<select style="color:rgb(111,111,111);border-color: rgb(238,238,238);" id="province" name="province"></select>
+					<select style="color:rgb(111,111,111);border-color: rgb(238,238,238);" id="city" name="city"></select>
+					<select style="color:rgb(111,111,111);border-color: rgb(238,238,238);" id="area" name="area"></select>
+				</div>
+	       	</div>
+	       	<div style="margin-bottom:20px;">
+				<label style="margin-right:10px; margin-top:5px;">演出时间</label>
+				 <div class="form-group" style="width:200px; margin-left:100px; margin-top:-20px;">
+		            <div class='input-group date' id='datetimepicker1'>
+		                <input type='text' class="form-control" id="performanceDate" name="performanceDate"/>
+		                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+		                </span>
+		            </div>
+		        </div>
+			</div>
+			<div style="margin-bottom:16px;">
+				<label style="margin-right:10px;">演出类型</label>
+				<div id="performanceCategory">
+					<label class="checkbox-inline">
+						<input type="radio" name="performanceCategory" id="optionsRadios1" value="M">音乐会
+					</label>
+					<label class="checkbox-inline">
+				    	<input type="radio" name="performanceCategory" id="optionsRadios2" value="C">演唱会
+				    </label>
+				    <label class="checkbox-inline">
+				    	<input type="radio" name="performanceCategory" id="optionsRadios3" value="D">话剧
+				    </label>
+			    </div>
+			</div>
+			<div class="clearfix"> </div>
+			<input type="button" id="searchBtn" value="查询演出" class="btn btn-success" style="margin-left: 280px;">
+		</form>
+		<script type="text/javascript">
+           	$(function () {
+           	    $('#datetimepicker1').datetimepicker({
+           	    	minView: "month", //选择日期后，不会再跳转去选择时分秒 
+           	    	format: "yyyy-mm-dd", //选择日期后，文本框显示的日期格式 
+           	    	autoclose:true //选择日期后自动关闭 
+           	    });
+           	 	$("#distpicker1").distpicker({
+            		autoSelect:false
+            	});
+           	});
+        </script>
+		<div class="clearfix" style="height:2em;"></div>
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>演出信息</label>
+   			</div>
+	    	<div class="panel-body">
+	    		<div id="performanceInfo">
+	    		</div>
+	    	</div>
+		</div>
+	</div>
+</div>
+        
+<script>
+var ppid;
+
+function buyTicket(obj) {
+	ppid = obj.getAttribute("value");
+	window.location.href="memberBuyTicket.html?ppid="+ppid;
+}
+
+$(document).ready(function () {
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'M') {//会员已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到会员登录页面
+				window.location.href="/Tickets/home?pageId=3";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到会员登录页面
+			window.location.href="/Tickets/home?pageId=3";
+		}
+	});
+	
+	//“查询演出”按钮点击事件
+	$('#searchBtn').click(function() {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/memberSearchPerformancePlan",
+	        type:"POST",
+	        data:$('#search_form').serialize(),
+	        "dataType":"json",
+	        success:function (data){
+	        	if(data != "fail") {//演出信息存在
+	        		var dataValue = eval(data);
+					var length = dataValue.length;
+					
+					var insertText = "";
+					for(var i=0; i<length;i++) {//将每个演出信息加入列表中
+						insertText += "<div class='list-group-item'><label> 演出名称：</label><span>"+dataValue[i].ppname+"</span>"+
+			 			"<label style='margin-left:20px;'>演出场馆：</label><span>"+dataValue[i].vname+"</span><div></div>"+
+			 			"<label>演出介绍：</label><span>"+dataValue[i].briefIntro+"</span><div></div>"+
+			 			"<label>开始时间：</label><span>"+dataValue[i].startTime+"</span><label style='margin-left:20px;'>结束时间：</label><span>"+dataValue[i].endTime+"</span><div></div>"+
+			 			"<label>VIP类座位价格：</label><span>"+dataValue[i].seatVipPrice+"</span><label style='margin-left:20px;'>A类座位价格：</label><span>"+dataValue[i].seatAPrice+"</span>"+
+			 			"<label style='margin-left:20px;'>B类座位价格：</label><span>"+dataValue[i].seatBPrice+"</span><div></div>"+
+			 			"<label>C类座位价格：</label><span>"+dataValue[i].seatCPrice+"</span><label style='margin-left:20px;'>D类座位价格：</label><span>"+dataValue[i].seatDPrice+"</span><div></div>"+
+			 			"<div style='margin-top:20px; margin-left:270px; margin-bottom:10px;'><button class='btn btn-normal' onclick='buyTicket(this)' value='"+dataValue[i].ppid+"'>立即购买</button></div></div>";
+					}
+					document.getElementById('performanceInfo').innerHTML = insertText;
+				}
+				else{
+					document.getElementById('performanceInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">没有对应的演出信息！</div>';
+	        	}
+	        },
+	   	 	"error":function(data) {
+				document.getElementById('performanceInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">没有对应的演出信息！</div>';
+			}
+	    });
+	});
+	
+});
+
+</script>
+</body>
+</html>

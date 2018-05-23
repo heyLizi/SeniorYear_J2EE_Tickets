@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-会员-个人设置</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-datetimepicker.js"></script>
+<script src="js/bootstrap-datetimepicker.fr.js"></script>
+<script src="js/moment.js"></script> 
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<!-- 模态框 -->
+<div class="modal fade" id="modifyRgtInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">注册信息</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="form-info">
+	            	<form class="form-inline" role="form" method="post" id="rgtInfo_form">
+			        	<label>会员编号：</label>
+			        	<span class="text" id="mid"></span>
+	            		<p></p>
+	            		<label>注册邮箱：</label>
+	            		<span class="text" id="email"></span>
+						<p></p>
+						<label>新的密码</label>
+		            	<input class="form-control" type="password" id="passwd1">
+						<p></p>
+						<label>确认密码</label>
+		            	<input class="form-control" type="password" id="passwd2">
+		            	<p></p>
+					    <div style="width:20%; margin:0 auto; text-align:middle;">
+            				<label class="hvr-sweep-to-right">
+				           		<input id="modifyRgtInfoBtn" type="button" value="确定">
+				    		</label>
+				    	</div>
+					    <div id="modifyRgtInfoInfo"></div>
+	            	</form>
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modifyPrsInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">个人信息</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="form-info">
+	            	<form class="form-inline" role="form" method="post" id="prsInfo_form">
+			        	<label>个人昵称</label>
+			        	<input class="form-control" type="text" id="mname" name="mname">
+	            		<p></p>
+	            		<label>会员性别</label>
+	            		<div id="sexCategory">
+							<label class="checkbox-inline">
+								<input type="radio" name="sexCategory" id="optionsRadios1" value="M">男
+							</label>
+							<label class="checkbox-inline">
+						    	<input type="radio" name="sexCategory" id="optionsRadios2" value="F">女
+						    </label>
+						</div>
+						<p></p>
+						<label>出生日期</label>
+		            	<div class="container">
+					        <div class="form-group">
+					            <div class='input-group date' id='datetimepicker1' style="margin-left:-10px; width:200px;">
+					                <input type='text' class="form-control" id="birthDate" name="birthDate" style="width:88%"/>
+					                <span class="input-group-addon" style="margin-left:-20px; padding:8px 8px;">
+				                		<span class="glyphicon glyphicon-calendar"></span>
+					                </span>
+					            </div>
+					        </div>
+						</div>
+						<p></p>
+					    <div style="width:20%;margin:0 auto;text-align:middle;">
+            				<label class="hvr-sweep-to-right">
+				           		<input id="modifyPrsInfoBtn" type="button" value="确定">
+				    		</label>
+				    	</div>
+					    <div id="modifyPrsInfoInfo"></div>
+	            	</form>
+            	</div>
+            	
+				<script type="text/javascript">
+				    $(function () {
+				        $('#datetimepicker1').datetimepicker({
+		                	minView: "month", //选择日期后，不会再跳转去选择时分秒 
+		                	format: "yyyy-mm-dd", //选择日期后，文本框显示的日期格式 
+		                	autoclose:true //选择日期后自动关闭 
+					    });
+				    });
+				</script>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addPayAcnt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">支付账户</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="form-info">
+	            	<form class="form-inline"  role="form" method="post" id="payAcnt_form">
+			        	<label>账户类型</label>
+			        	<div id="bankCategory">
+				        	<label class="checkbox-inline">
+								<input type="radio" name="bankCategory" id="optionsRadios1" value="B">银行卡
+							</label>
+							<label class="checkbox-inline">
+						    	<input type="radio" name="bankCategory" id="optionsRadios2" value="W">微信
+						    </label>
+						    <label class="checkbox-inline">
+						    	<input type="radio" name="bankCategory" id="optionsRadios3" value="Z">支付宝
+						    </label>
+					    </div>
+	            		<p></p>
+	            		<label>账户名称</label>
+	            		<input class="form-control" type="text" id="acntName" name="acntName">
+						<p></p>
+						<label>支付密码</label>
+		            	<input class="form-control" type="password" id="acntPasswd" name="acntPasswd">
+						<p></p>
+					    <div style="width:20%;margin:0 auto;text-align:middle;">
+            				<label class="hvr-sweep-to-right">
+				           		<input id="addPayAcntBtn" type="button" value="添加">
+				    		</label>
+				    	</div>
+					    <div id="addPayAcntinfo"></div>
+	            	</form>
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>会员</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>个人设置</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+    		<li class="active"><a href="memberPersonalSetting.html">个人设置</a></li>
+        	<li><a href="memberCardInfo.html">会员卡信息</a></li>
+        	<li><a href="memberSearchPerformance.html">票务预订</a></li>
+        	<li><a href="memberManageOrder.html">订单管理</a></li>
+        	<li><a href="memberStatistics.html">统计信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>注册信息</label>
+        		<a href='#' data-toggle='modal' data-target='#modifyRgtInfo' id="modifyRgtInfoHref"  style="margin-left:560px;">修改注册信息</a>
+   			</div>
+	    	<div class="panel-body">
+	    		<div style="margin-bottom:10px;">
+	        		<label style="margin-right:10px;">会员编号：</label><span id="mid_show" class="text"></span>
+	        	</div>
+	        	<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">注册邮箱：</label><span id="email_show" class="text"></span>
+				</div>
+				<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">登录密码：</label><span id="mpassword_show" class="password"></span>
+				</div>
+	    	</div>
+		</div>
+		<div class="clearfix" style="height:2em;"></div>
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>个人信息</label>
+        		<a href='#' data-toggle='modal' data-target='#modifyPrsInfo' id="modifyPrsInfoHref" style="margin-left:560px;">修改个人信息</a>
+   			</div>
+	    	<div class="panel-body">
+		    	<div style="margin-bottom:10px;">
+		        	<label style="margin-right:10px;">个人昵称：</label><span id="mname_show" class="text"></span>
+		        </div>
+				<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">会员性别：</label><span id="msex_show" class="text"></span>
+				</div>
+				<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">出生日期：</label><span id="birthDate_show" class="text"></span>
+				</div>
+	    	</div>
+		</div>
+		<div class="clearfix" style="height:2em;"></div>
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>支付账户</label>
+        		<a href='#' data-toggle='modal' data-target='#addPayAcnt' id="addPayAcnt" style="margin-left:560px;">添加支付账户</a>
+   			</div>
+	    	<div class="panel-body" id="payAcntInfo">
+	    	</div>
+		</div>
+	</div>
+</div>
+        
+<script>
+$(document).ready(function () {
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'M') {//会员已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到会员登录页面
+				window.location.href="/Tickets/home?pageId=3";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到会员登录页面
+			window.location.href="/Tickets/home?pageId=3";
+		}
+	});
+
+	//更新注册信息和个人信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/memberShowMemberDetail",
+		"type":"GET",
+		"dataType":"json",
+        "async":false,
+		"success": function(data) {
+			if(data != "fail") {//会员个人信息存在
+				var dataValue = eval(data);
+				
+				document.getElementById('mid_show').innerHTML = dataValue.mid;
+				document.getElementById('email_show').innerHTML = dataValue.email;
+				document.getElementById('mpassword_show').innerHTML = dataValue.mpasswd;
+				document.getElementById('mname_show').innerHTML = dataValue.mname;
+				document.getElementById('msex_show').innerHTML = dataValue.sex;
+				document.getElementById('birthDate_show').innerHTML = dataValue.birthDate;
+			}
+		},
+		"error":function(data) {
+		}
+	});
+	
+	//更新支付账户信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/memberShowPayAccountList",
+		"type":"GET",
+		"dataType":"json",
+        "async":false,
+		"success": function(data) {
+			if(data != "fail") {//支付账户信息存在
+				var dataValue = eval(data);
+				var length = dataValue.length;
+				
+				var insertText = "";
+				for(var i=0; i<length;i++) {//将每个支付账户信息加入列表中
+					insertText += "<div class='list-group-item'><label>账户类型：</label><span>"+dataValue[i].category+"</span>"+
+		 			"<label style='margin-left:20px;'>账户名称：</label><span>"+dataValue[i].acntName+"</span></div>";
+				}
+				document.getElementById('payAcntInfo').innerHTML = insertText;
+			}
+			else{
+				document.getElementById('payAcntInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">还没有绑定支付账户！</div>';
+			}
+		},
+		"error":function(data) {
+		}
+	});
+
+	//当点击“修改注册信息”时，模态框对应的操作
+	$('#modifyRgtInfo').on('show.bs.modal', function() {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/memberShowMemberDetail",
+	        "type":"GET",
+			"dataType":"json",
+	        "async":false,
+	        success:function (data){
+	        	if(data != "fail") {//会员个人信息存在
+					var dataValue = eval(data);
+					document.getElementById('mid').innerHTML = dataValue.mid;
+					document.getElementById('email').innerHTML = dataValue.email;
+	        	}
+	        }
+	    });
+	});	
+	
+	//“修改注册信息”按钮点击事件
+	$('#modifyRgtInfoBtn').click(function() {
+		if($('#passwd1').val() == undefined || $('#passwd2').val() == undefined) {
+			document.getElementById('modifyRgtInfoInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">请填写完整的新密码！</div>';
+		}
+		else if($('#passwd1').val() != $('#passwd2').val()) {
+			document.getElementById('modifyRgtInfoInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">请保证两次输入的密码一致！</div>';
+		}
+		else{
+		    $.ajax({
+		        url:"http://localhost:8080/Tickets/memberResetPassword",
+		        type:"POST",
+		        data:{"passwd":$('#passwd1').val()},
+		        success:function (data) {
+		        	if(data == "success") {
+			        	alert("修改成功");
+			        }
+		        	else {
+		        		alert("修改失败,"+data);
+		        	}
+		        	setTimeout('jumpTo(5)',1000);
+		        }
+		    });
+		}
+	});
+	
+	//当点击“修改个人信息”时，模态框对应的操作
+	$('#modifyPrsInfo').on('show.bs.modal', function() {
+		//这里不做任何操作
+	});	
+	
+	//“修改个人信息”按钮点击事件
+	$('#modifyPrsInfoBtn').click(function() {
+		if($('#mname').val() == undefined || $('#sexCategory').val() == undefined || $('birthDate').val == undefined) {
+			document.getElementById('modifyPrsInfoInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">请填写完整个人信息！</div>';
+		}
+		else{
+		    $.ajax({
+		        url:"http://localhost:8080/Tickets/memberSetInfo",
+		        data:$('#prsInfo_form').serialize(),
+		        type:"POST",
+		        success:function (data) {
+		        	if(data == "success"){
+			        	alert("修改成功");
+			        }
+		        	else {
+		        		alert("修改失败,"+data);
+		        	}
+		        	setTimeout('jumpTo(5)',1000);
+		        }
+		    });
+		}
+	});
+	
+	//当点击“添加支付账户”时，模态框对应的操作
+	$('#addPayAcnt').on('show.bs.modal', function() {
+		//这里不做任何操作
+	});	
+	
+	//“添加支付账户”按钮点击事件
+	$('#addPayAcntBtn').click(function() {
+		if($('#bankCategory').val() == undefined || $('#acntName').val() == undefined || $('acntPasswd').val == undefined) {
+			document.getElementById('addPayAcntInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">请填写完整支付账户信息！</div>';
+		}
+		else{
+		    $.ajax({
+		        url:"http://localhost:8080/Tickets/memberAddPayAccount",
+		        type:"POST",
+		        data:$('#payAcnt_form').serialize(),
+		        success:function (data){
+		        	if(data == "success") {
+			        	alert("添加成功");
+			        }
+		        	else {
+		        		alert("添加失败,"+data);
+		        	}
+		        	setTimeout('jumpTo(5)',1000);
+		        }
+		    });
+		}
+	});
+	
+});
+
+function jumpTo(pageId) {
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+
+</script>
+</body>
+</html>

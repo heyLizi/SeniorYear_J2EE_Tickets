@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-集团经理-结算收入</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>经理</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>结算收入</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+        	<li><a href="ticketsManagerCheckApplication.html">审批申请</a></li>
+        	<li class="active"><a href="ticketsManagerSettleIncome.html">结算收入</a></li>
+        	<li><a href="ticketsManagerStatistics.html">统计信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+			<div class="panel-heading">
+	       		<label>结算收入</label>
+	  		</div>
+	    	<div class="panel-body">
+	    		<div style="margin-bottom:10px;">
+	        		<label style="margin-right:10px;">集团现有余额：</label><span class="text" id="ticketsBalance"></span>元
+	        	</div>
+	        	<div id="venueInfo">
+	        	</div>
+				<div class="form-info">
+					<div class="form-submit" id="login-submit">
+						<h5><a class="hvr-sweep-to-right">
+	      					<input id="settleBtn" type="button" value="结算"></input>
+	    					</a>
+	    				</h5>
+	    			</div>
+    			</div>
+			    <div id="settleInfo"></div>
+	    	</div>
+	    </div>
+	</div>
+</div>
+        
+<script type="text/javascript">
+$(document).ready(function () {
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'T') {//经理已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到经理登录页面
+				window.location.href="/Tickets/home?pageId=24";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到经理登录页面
+			window.location.href="/Tickets/home?pageId=24";
+		}
+	});
+
+	//更新集团余额信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/managerStatistics",
+		"type":"GET",
+		"dataType":"json",
+		"success": function(data){
+			if(data != "fail"){//集团统计信息存在
+				var dataValue = eval(data);
+				
+				document.getElementById('ticketsBalance').innerHTML = dataValue.profitMoney;
+			}
+		},
+		"error":function(data){
+		}
+	});
+	
+	$.ajax({
+		url:"http://localhost:8080/Tickets/managerShowSettleInfo",
+		"type":"GET",
+		"dataType":"json",
+		"success": function(data){
+			if(data != "fail"){//结算收入信息存在
+				var dataValue = eval(data);
+				var length = dataValue.length;
+				
+				var insertText = "";
+				for(var i=0; i<length; i++) {
+					insertText += "<div class='list-group-item'>"+
+					"<label style='margin-left: 20px;'>场馆编号：</label><span>"+dataValue[i].vid+"</span>"+
+		 			"<label style='margin-left: 20px;'>场馆名：</label><span>"+dataValue[i].vname+"</span>"+
+		 			"<label style='margin-left: 20px;'>上次结算时间：</label><span>"+dataValue[i].lastSettleTime+"</span>"+
+		 			"<label style='margin-left: 20px;'>余额：</label><span>"+dataValue[i].balance+"</span>元</div>";
+				}
+				document.getElementById('venueInfo').innerHTML = insertText;
+			}
+			else{
+				document.getElementById('venueInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">没有场馆结算信息！</div>';
+			}
+		},
+		"error":function(data){
+			document.getElementById('venueInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">没有场馆结算信息！</div>';
+		}
+	});
+	
+	//点击“结算”按钮时的事件
+	$('#settleBtn').click(function(){
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/managerSettleIncome",
+	        type:"GET",
+	        success:function (data){
+	        	if(data == "success"){
+		        	alert("结算成功");
+		        }
+	        	else {
+	        		alert("结算失败");
+	        	}
+	        	setTimeout('jumpTo(27)',1000);
+	        }
+	    });
+	});
+	
+});
+
+function jumpTo(pageId){
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+</script>
+</body>
+</html>

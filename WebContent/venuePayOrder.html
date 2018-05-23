@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-场馆-演出售票</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>场馆</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>演出售票</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+        	<li><a href="venueSetting.html">场馆设置</a></li>
+        	<li><a href="venueReleasePlan.html">发布计划</a></li>
+        	<li class="active"><a href="venueSearchPerformance.html">演出售票</a></li>
+        	<li><a href="venueCheckIn.html">演出检票</a></li>
+        	<li><a href="venueStatistics.html">统计信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>订单信息</label>
+   			</div>
+	    	<div class="panel-body">
+	    		<div id="orderInfo">
+		    		<label>订单编号：</label><span id="oid"></span>
+	           		<p></p>
+	           		<label>座位类型：</label><span id="seatCategory"></span>
+	           		<label style="margin-left:20px;">该类型座位单价：</label><span id="seatPrice"></span>元/人
+	           		<label style="margin-left:20px;">购座数量：</label><span id="seatNum"></span>
+	           		<p></p>
+	           		<label>原始金额：</label><span id="originMoney"></span>元
+	           		<label style="margin-left:20px;">折扣后金额：</label><span id="realMoney"></span>元
+	           		<p></p>
+	           		<label>座位号：</label><span id="soldSeats"></span>
+	           		<p></p>
+	    		</div>
+	    	</div>
+		</div>
+		<div class="clearfix" style="height:2em;"></div>
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+			<div class="panel-heading">
+        		<label>支付信息确认</label>
+   			</div>
+	    	<div class="panel-body">
+	    		<div>
+	    			<label>支付金额：</label><span id="payMoney"></span>元
+	    			<p></p>
+	    			<div class="form-submit" id="login-submit">
+						<h5><a class="hvr-sweep-to-right">
+        					<input id="payBtn" type="button" value="收款"></input>
+      					</a></h5>
+      				</div>
+      				<div id="payInfo"></div>
+	    		</div>
+	    	</div>
+		</div>
+	</div>
+</div>
+        
+<script>
+
+//获取上一个页面传来的订单编号的变量值
+var thisURL = document.URL;  
+var oid = ((thisURL.split('?')[1]).split('&')[0]).split('=')[1];
+var mid = ((thisURL.split('?')[1]).split('&')[1]).split('=')[1]
+
+$(document).ready(function () {
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'V') {//场馆已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到场馆登录页面
+				window.location.href="/Tickets/home?pageId=16";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到场馆登录页面
+			window.location.href="/Tickets/home?pageId=16";
+		}
+	});
+	
+	//更新订单信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/showOrderDetail",
+		"type":"POST",
+		"data":{"oid":oid},
+		"dataType":"json",
+		"success": function(data) {
+			if(data != "fail") {//演出信息存在
+        		var dataValue = eval(data);
+				
+				document.getElementById('oid').innerHTML = dataValue.oid;
+				document.getElementById('seatCategory').innerHTML = dataValue.seatCategory;
+				document.getElementById('seatPrice').innerHTML = dataValue.seatPrice;
+				document.getElementById('seatNum').innerHTML = dataValue.seatNum;
+				document.getElementById('originMoney').innerHTML = dataValue.originMoney;
+				document.getElementById('realMoney').innerHTML = dataValue.realMoney;
+				document.getElementById('soldSeats').innerHTML = dataValue.seats;
+				
+				//将支付金额的值初始化为折扣后的实际金额
+				document.getElementById('payMoney').innerHTML = $("#realMoney").text();
+			}
+		},
+		"error":function(data) {
+		}
+	});
+	
+	//"支付按钮"点击事件
+	$('#payBtn').click(function() {
+		$.ajax({
+	        url:"http://localhost:8080/Tickets/venuePayOrder",
+	        type:"POST",
+	        data:{"oid":oid, "mid":mid},
+	        success:function (data){
+	        	if(data == "success") {//支付成功
+	        		document.getElementById('payInfo').innerHTML='<div class="alert alert-success" role="alert" style="text-align: center">支付成功，即将跳转至演出售票页面</div>';
+	        		setTimeout('jumpTo(20)',3000);//跳转至演出售票页面
+	        	}
+				else{
+					document.getElementById('payInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">支付失败，'+data+'。</div>';
+	        	}
+	        }
+	    });
+	});
+	
+});
+
+function jumpTo(pageId){
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+
+</script>
+</body>
+</html>

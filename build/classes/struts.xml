@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.devMode" value="true" />
+
+    <!-- 手动配置 -->
+    <package name="action" extends="struts-default">
+    	
+    	<!-- 公用Action -->
+    	<action name="home" class="action.HomeAction">
+    		<result name="home">index.html</result>
+    		<result name="memberRegister">memberRegister.html</result>
+    		<result name="verifyEmail">verifyEmail.html</result>
+    		<result name="memberLogin">memberLogin.html</result>
+    		<result name="memberMain">memberMain.html</result>
+    		<result name="memberPersonalSetting">memberPersonalSetting.html</result>
+    		<result name="memberCardInfo">memberCardInfo.html</result>
+    		<result name="memberSearchPerformance">memberSearchPerformance.html</result>
+    		<result name="memberBuyTicket">memberBuyTicket.html</result>
+    		<result name="memberManageOrder">memberManageOrder.html</result>
+    		<result name="memberStatistics">memberStatisticsInfo.html</result>
+    		<result name="applicantRegister">venueApplicantRegister.html</result>
+    		<result name="applicantLogin">venueApplicantLogin.html</result>
+    		<result name="applicantMain">venueApplicantMain.html</result>
+    		<result name="applicantPersonalSetting">venueApplicantPersonalSetting.html</result>
+    		<result name="applicantApply">venueApplicantApply.html</result>
+    		<result name="venueLogin">venueLogin.html</result>
+    		<result name="venueMain">venueMain.html</result>
+    		<result name="venueSetting">venueSetting.html</result>
+    		<result name="venueReleasePlan">venueReleasePlan.html</result>
+    		<result name="venueSearchPerformance">venueSearchPerformance.html</result>
+    		<result name="venueSellTicket">venueSellTicket.html</result>
+    		<result name="venueCheckIn">venueCheckIn.html</result>
+    		<result name="venueStatistics">venueStatisticsInfo.html</result>
+    		<result name="managerLogin">ticketsManagerLogin.html</result>
+    		<result name="managerMain">ticketsManagerMain.html</result>
+    		<result name="managerCheckApplication">ticketsManagerCheckApplication.html</result>
+    		<result name="managerSettleIncome">ticketsManagerSettleIncome.html</result>
+    		<result name="managerStatistics">ticketsManagerStatisticsInfo.html</result>
+    	</action>
+    	
+    	<action name="isAuthorized" class="action.IsAuthorizedAction">
+    		<result name="success"></result>
+    		<result name="fail"></result>
+    	</action>
+    	
+    	<action name="logout" class="action.LogoutAction">
+    		<result name="success" type="redirect">/home?pageId=0</result>
+    	</action>
+    	
+    	<!-- 会员用Action -->
+    	<action name="memberAddPayAccount" class="action.MemberAddPayAccountAction">
+    		<result name="success"></result>
+    		<result name="fail"></result>
+    	</action>
+    	
+    	<action name="memberBuyTicket" class="action.MemberBuyTicketAction">
+    		<result name="success"></result>
+    		<result name="fail"></result>
+    	</action>
+    	
+    	<action name="memberLogin" class="action.MemberLoginAction">
+    		<result name="success"></result>
+    		<result name="fail"></result>
+    	</action>
+    	
+    	<action name="memberPayOrder" class="action.MemberPayOrderAction">
+    		<result name="success"></result>
+    		<result name="fail"></result>
+    	</action>
+    	
+    	<action name="memberRedeemCoupon" class="action.MemberRedeemCouponAction">
+    		<result name="success"></result>
+    		<result name="fail"></result>
+    	</action>
+    	
+    	<action name="memberRefundOrder" class="action.MemberRefundOrderAction">
+    		<result name="success"></result>
+    		<result name="fail"></result>
+    	</action>
+    	
+    	<action name="memberRegister" class="action.MemberRegisterAction">
+    		<result name="success"></result>
+    		<result name="fail"></result>
+    	</action>
+    	
+    	<action name="memberResetPassword" class="action.MemberResetPasswordAction">
+    		<result name="success"></result>
+    		<result name="fail"></result>
+    	</action>
+    	
+    	<action name="memberSearchPerformancePlan" class="action.MemberSearchPerformancePlanAction">
+    		<result name="success"></result>
+    		<result name="fail"></result>
+    	</action>
+    	
+    	<action name="memberSetInfo" class="action.MemberSetInfoAction">
+    		<result name="success"></result>
+    		<result name="fail"></result>
+    	</action>
+    	
+    	<action name="memberShowCardDetail" class="action.MemberShowCardDetailAction">
+    		<result name="success"></result>
+    		<result name="fail"></result>
+    	</action>
+    	
+    	 <action name="memberShowCouponList" class="action.MemberShowCouponListAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+    	<action name="memberShowMemberDetail" class="action.MemberShowMemberDetailAction">
+    		<result name="success"></result>
+    		<result name="fail"></result>
+    	</action>
+    	
+        <action name="memberShowOrderDetail" class="action.MemberShowOrderDetailAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="memberShowOrderList" class="action.MemberShowOrderListAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="memberShowPayAccountList" class="action.MemberShowPayAccountListAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+       
+        <action name="memberStatistics" class="action.MemberStatisticsAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="memberStopCard" class="action.MemberStopCardAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="memberVerifyEmail" class="action.MemberVerifyEmailAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+       
+       	<!-- 集团经理用Action -->
+        <action name="managerCheckApplication" class="action.TicketsManagerCheckApplicationAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="managerCheckUpdate" class="action.TicketsManagerCheckUpdateAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="managerLogin" class="action.TicketsManagerLoginAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="managerSettleIncome" class="action.TicketsManagerSettleIncomeAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="managerShowApplicationDetail" class="action.TicketsManagerShowApplicationDetailAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+       	<action name="managerShowApplicationList" class="action.TicketsManagerShowApplicationListAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="managerShowUpdateDetail" class="action.TicketsManagerShowUpdateDetailAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="managerShowSettleInfo" class="action.TicketsManagerShowSettleInfoAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="managerShowUpdateList" class="action.TicketsManagerShowUpdateListAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="managerStatistics" class="action.TicketsManagerStatisticsAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <!-- 场馆申请者用Action -->
+        <action name="applicantApplyVenue" class="action.VenueApplicantApplyVenueAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="applicantLogin" class="action.VenueApplicantLoginAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="applicantRegister" class="action.VenueApplicantRegisterAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="applicantResetPassword" class="action.VenueApplicantResetPasswordAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="applicantShowApplicantDetail" class="action.VenueApplicantShowApplicantDetailAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="applicantShowApplicationDetail" class="action.VenueApplicantShowApplicationDetailAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="applicantShowApplicationList" class="action.VenueApplicantShowApplicationListAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <!-- 场馆用Action -->
+        <action name="venueCheckin" class="action.VenueCheckinAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="venueLogin" class="action.VenueLoginAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="venuePayOrder" class="action.VenuePayOrderAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="venueReleasePlan" class="action.VenueReleasePerformancePlanAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="venueResetPassword" class="action.VenueResetPasswordAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="venueSellTicket" class="action.VenueSellTicketAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="venueShowAllPerformancePlanList" class="action.VenueShowAllPerformancePlanListAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="venueShowAvailPerformancePlanList" class="action.VenueShowAvailPerformancePlanListAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="venueShowPerformancePlanDetail" class="action.VenueShowPerformancePlanDetailAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="venueShowVenueDetail" class="action.VenueShowVenueDetailAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+         <action name="venueStatistics" class="action.VenueStatisticsAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="venueUpdateVenueInfo" class="action.VenueUpdateVenueInfoAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <!-- 会员与场馆在购票/售票时用Action -->
+        <action name="showEmptySeatsOfAPerformance" class="action.ShowEmptySeatsOfAPerformanceAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+         
+        <action name="showOrderDetail" class="action.ShowOrderDetailAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+        <action name="showPerformancePlanDetail" class="action.ShowPerformancePlanDetailAction">
+        	<result name="success"></result>
+        	<result name="fail"></result>
+        </action>
+        
+    </package>
+
+</struts>

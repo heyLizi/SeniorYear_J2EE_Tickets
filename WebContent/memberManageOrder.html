@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-会员-订单管理</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<!-- 模态框 -->
+<div class="modal fade" id="orderDetailInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">订单详细信息</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="form-info">
+	            	<form class="form-inline"  role="form" method="post" id="refund_form">
+			        	<label>演出名称：</label><span id="perName">郭德纲相声专场</span>
+			    		<label>演出场馆：</label><span id="perVenue">北京工人体育场</span>
+		           		<p></p>
+		           		<label >订单类型：</label><span id="orderType">不选座购买</span>
+		           		<label style="margin-left:20px">订单状态：</label><span id="orderState">已付款</span>
+		           		<p></p>
+		           		<label>订单提交时间：</label><span id="orderTime">2018-02-02 22:00:00</span>
+		           		<p></p>
+		           		<label>演出开始时间：</label><span id="startTime">2018-02-16 19:00:00</span>
+		           		<p></p>
+		           		<label>座位类型：</label><span id="seatCategory">A</span>类
+		           		<label style="margin-left:20px">座位数量：</label><span id="seatNum">5</span>
+		           		<p></p>
+		           		<label>订单原始金额：</label><span id="originMoney">288</span>元
+		           		<label style="margin-left:20px">订单实际金额：</label><span id="realMoney">188</span>元
+		           		<p></p>
+	           			<label>座位号：</label><span id="soldSeats"></span>
+		           		<p></p>
+					    <div style="width:40%;margin:0 auto;text-align:middle;">
+					    	<label class="hvr-sweep-to-right">
+				           		<input id="payBtn" type="button" value="付款">
+				    		</label>
+            				<label class="hvr-sweep-to-right">
+				           		<input id="refundBtn" type="button" value="退款">
+				    		</label>
+				    	</div>
+					    <div id="refundInfo"></div>
+	            	</form>
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>会员</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>订单管理</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+        	<li><a href="memberPersonalSetting.html">个人设置</a></li>
+        	<li><a href="memberCardInfo.html">会员卡信息</a></li>
+        	<li><a href="memberSearchPerformance.html">票务预订</a></li>
+        	<li class="active"><a href="memberManageOrder.html">订单管理</a></li>
+        	<li><a href="memberStatistics.html">统计信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>订单信息</label>
+   			</div>
+	    	<div class="panel-body" id="orderInfo">
+	    	</div>
+		</div>
+	</div>
+</div>
+        
+<script>
+
+var oid = 0;
+
+function getOid(obj){
+	oid = obj.getAttribute("id");
+}
+
+$(document).ready(function () {
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'M') {//会员已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到会员登录页面
+				window.location.href="/Tickets/home?pageId=3";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到会员登录页面
+			window.location.href="/Tickets/home?pageId=3";
+		}
+	});
+	
+	
+	//更新订单信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/memberShowOrderList",
+		"type":"GET",
+		"dataType":"json",
+        "async":false,
+		"success": function(data) {
+			if(data != "fail") {//订单信息存在
+				var dataValue = eval(data);
+				var length = dataValue.length;
+				
+				var insertText = "";
+				for(var i=0; i<length;i++) {//将每个演出信息加入列表中
+					insertText += "<a href='#' onclick='getOid(this)' data-toggle='modal' data-target='#orderDetailInfo' class='list-group-item' id="+dataValue[i].oid+">"+
+		 			"<h4 class='list-group-item-heading'>订单编号：<span>"+dataValue[i].oid+"</span></h4>"+
+		 			"<label>订单状态：</label><span>"+dataValue[i].orderState+"</span>"+
+		 			"<label style='margin-left: 50px;'>演出名称：</label><span>"+dataValue[i].ppName+"</span></a>";
+				}
+				document.getElementById('orderInfo').innerHTML = insertText;
+			}
+			else{
+				document.getElementById('orderInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">还没有订单！</div>';
+			}
+		},
+		"error":function(data) {
+			document.getElementById('orderInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">还没有订单！</div>';
+		}
+	});
+	
+	//点击某一个订单查看详情时的模态框事件
+	$('#orderDetailInfo').on('show.bs.modal', function () {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/memberShowOrderDetail",
+	        data:{"oid":oid},
+	        type:"POST",
+	        dataType:"json",
+	        async:false,
+	        success:function (data){
+	        	if(data != "fail") {//演出信息存在
+		        	var dataValue = eval(data);
+					
+		            document.getElementById('perName').innerHTML = dataValue.ppName;
+		            document.getElementById('perVenue').innerHTML = dataValue.venue;
+		            document.getElementById('orderType').innerHTML = dataValue.orderType;
+		            document.getElementById('orderState').innerHTML = dataValue.orderState;
+		            document.getElementById('startTime').innerHTML = dataValue.startTime;
+		            document.getElementById('orderTime').innerHTML = dataValue.orderTime;
+		            document.getElementById('seatCategory').innerHTML = dataValue.seatCategory;
+		            document.getElementById('seatNum').innerHTML = dataValue.seatNum;
+		            document.getElementById('originMoney').innerHTML = dataValue.totalMoney;
+		            document.getElementById('realMoney').innerHTML = dataValue.realMoney;
+		            document.getElementById('soldSeats').innerHTML = dataValue.seats;
+		            
+		            //根据订单的不同状态将按钮设为是否可以点击的
+		            if(dataValue.orderState == "待付款") {
+		            	$("#payBtn").show();  
+		            	$("#refundBtn").hide();  
+		            }
+		            else if(dataValue.orderState == "已付款") {
+		            	$("#payBtn").hide();  
+		            	$("#refundBtn").show();  
+		            }
+		            else {
+			            $("#payBtn").hide();  
+			            $("#refundBtn").hide();  
+		            }
+	        	}
+	        }
+	    });	  
+	});	
+	
+	//“付款”按钮点击事件
+	$('#payBtn').click(function() {
+		window.location.href="memberPayOrder.html?oid="+oid;
+	});
+	
+	//“退款”按钮点击事件
+	$('#refundBtn').click(function() {
+		$.ajax({
+	        url:"http://localhost:8080/Tickets/memberRefundOrder",
+	        type:"POST",
+	        data:{"oid":oid},
+	        success:function (data){
+	        	if(data != "fail") {//退款成功
+	        		document.getElementById('refundInfo').innerHTML = '<div class="alert alert-success" role="alert"style="text-align: center">退款成功！'+data+'</div>';
+	        		setTimeout('jumpTo(9)',3000);//跳转至会员管理订单页面
+	        	}
+	        	else {
+	        		document.getElementById('refundInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">退款失败！</div>';
+	        		setTimeout('jumpTo(9)',3000);//跳转至会员管理订单页面
+	        	}
+	        }
+		});
+	});
+	
+});
+
+function jumpTo(pageId){
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Spring配置文件的根元素，使用spring-beans-4.0.xsd语言约束 -->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">  
+
+	<!-- <import resource="applicationContext-quartz.xml"/> -->
+
+	<!-- 配置sessionFactory对象 -->  
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="configLocation">
+			<value>classpath:hibernate.cfg.xml</value>
+		</property>
+	</bean>
+	   
+	<!-- 配置使用服务所需要的实体类 -->
+	<bean id="CouponService" class="service.impl.CouponServiceImpl">
+		<property name="memberService">
+			<ref bean="MemberService"/>
+		</property>
+		<property name="couponDao">
+			<ref bean="CouponDao"/>
+		</property>
+	</bean>
+	
+	<bean id="MemberCardService" class="service.impl.MemberCardServiceImpl">
+		<property name="memberService">
+			<ref bean="MemberService"/>
+		</property>
+		<property name="memberCardDao">
+			<ref bean="MemberCardDao"/>
+		</property>
+		<property name="memberRuleDao">
+			<ref bean="MemberRuleDao"/>
+		</property>
+	</bean>
+	
+	<bean id="MemberService" class="service.impl.MemberServiceImpl">
+		<property name="memberCardService">
+			<ref bean="MemberCardService"/>
+		</property>
+		<property name="payAccountService">
+			<ref bean="PayAccountService"/>
+		</property>
+		<property name="utilityService">
+			<ref bean="UtilityService"/>
+		</property>
+		<property name="memberDao">
+			<ref bean="MemberDao"/>
+		</property>
+		<property name="memberPayDao">
+			<ref bean="MemberPayDao"/>
+		</property>
+		<property name="verifyEmailDao">
+			<ref bean="VerifyEmailDao"/>
+		</property>
+	</bean>
+	
+	<bean id="OrderService" class="service.impl.OrderServiceImpl">
+		<property name="couponService">
+			<ref bean="CouponService"/>
+		</property>
+		<property name="memberCardService">
+			<ref bean="MemberCardService"/>
+		</property>
+		<property name="memberService">
+			<ref bean="MemberService"/>
+		</property>
+		<property name="payAccountService">
+			<ref bean="PayAccountService"/>
+		</property>
+		<property name="performancePlanService">
+			<ref bean="PerformancePlanService"/>
+		</property>
+		<property name="refundService">
+			<ref bean="RefundService"/>
+		</property>
+		<property name="ticketsCompanyInfoService">
+			<ref bean="TicketsCompanyInfoService"/>
+		</property>
+		<property name="venueService">
+			<ref bean="VenueService"/>
+		</property>
+		<property name="orderDao">
+			<ref bean="OrderDao"/>
+		</property>
+		<property name="orderPayDao">
+			<ref bean="OrderPayDao"/>
+		</property>
+		<property name="soldSeatDao">
+			<ref bean="SoldSeatDao"/>
+		</property>
+	</bean>
+	
+	<bean id="PayAccountService" class="service.impl.PayAccountServiceImpl">
+		<property name="payAccountDao">
+			<ref bean="PayAccountDao"/>
+		</property>
+	</bean>
+	
+	<bean id="PerformancePlanService" class="service.impl.PerformancePlanServiceImpl">
+		<property name="performancePlanDao">
+			<ref bean="PerformancePlanDao"/>
+		</property>
+	</bean>
+	
+	<bean id="RefundService" class="service.impl.RefundServiceImpl">
+		<property name="orderService">
+			<ref bean="OrderService"/>
+		</property>
+		<property name="performancePlanService">
+			<ref bean="PerformancePlanService"/>
+		</property>
+		<property name="refundDao">
+			<ref bean="RefundDao"/>
+		</property>
+		<property name="refundRuleDao">
+			<ref bean="RefundRuleDao"/>
+		</property>
+	</bean>
+	
+	<bean id="SettleIncomeService" class="service.impl.SettleIncomeServiceImpl">
+		<property name="orderService">
+			<ref bean="OrderService"/>
+		</property>
+		<property name="refundService">
+			<ref bean="RefundService"/>
+		</property>
+		<property name="ticketsCompanyInfoService">
+			<ref bean="TicketsCompanyInfoService"/>
+		</property>
+		<property name="venueService">
+			<ref bean="VenueService"/>
+		</property>
+		<property name="settleIncomeDao">
+			<ref bean="SettleIncomeDao"/>
+		</property>
+		<property name="settleRuleDao">
+			<ref bean="SettleRuleDao"/>
+		</property>
+	</bean>
+	
+	<bean id="TicketsCompanyInfoService" class="service.impl.TicketsCompanyInfoServiceImpl">
+		<property name="settleIncomeService">
+			<ref bean="SettleIncomeService"/>
+		</property>
+		<property name="ticketsInfoDao">
+			<ref bean="TicketsInfoDao"/>
+		</property>
+	</bean>
+	
+	<bean id="UtilityService" class="service.impl.UtilityServiceImpl"></bean>
+	
+	<bean id="VenueService" class="service.impl.VenueServiceImpl">
+		<property name="venueDao">
+			<ref bean="VenueDao"/>
+		</property>
+		<property name="venueAccountDao">
+			<ref bean="VenueAccountDao"/>
+		</property>
+		<property name="venueApplicantDao">
+			<ref bean="VenueApplicantDao"/>
+		</property>
+		<property name="venueApplicationDao">
+			<ref bean="VenueApplicationDao"/>
+		</property>
+		<property name="venueUpdateDao">
+			<ref bean="VenueUpdateDao"/>
+		</property>
+	</bean>
+	
+	<!-- 配置数据访问所需要的实体类 -->
+	<bean id="CouponDao" class="dao.impl.CouponDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="coupon">
+			<ref bean="CouponBean"/>
+		</property>
+	</bean>
+	
+	<bean id="CouponRuleDao" class="dao.impl.CouponRuleDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="couponRule">
+			<ref bean="CouponRuleBean"/>
+		</property>
+	</bean>
+	
+	<bean id="MemberCardDao" class="dao.impl.MemberCardDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="memberCard">
+			<ref bean="MemberCardBean"/>
+		</property>
+	</bean>
+	
+	<bean id="MemberDao" class="dao.impl.MemberDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="member">
+			<ref bean="MemberBean"/>
+		</property>
+	</bean>
+	
+	<bean id="MemberPayDao" class="dao.impl.MemberPayDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="memberPay">
+			<ref bean="MemberPayBean"/>
+		</property>
+	</bean>
+	
+	<bean id="MemberRuleDao" class="dao.impl.MemberRuleDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="memberRule">
+			<ref bean="MemberRuleBean"/>
+		</property>
+	</bean>
+	
+	<bean id="OrderDao" class="dao.impl.OrderDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="order">
+			<ref bean="OrderBean"/>
+		</property>
+	</bean>
+	
+	<bean id="OrderPayDao" class="dao.impl.OrderPayDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="orderPay">
+			<ref bean="OrderPayBean"/>
+		</property>
+	</bean>
+	
+	<bean id="PayAccountDao" class="dao.impl.PayAccountDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="payAccount">
+			<ref bean="PayAccountBean"/>
+		</property>
+	</bean>
+	
+	<bean id="PerformancePlanDao" class="dao.impl.PerformancePlanDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="performancePlan">
+			<ref bean="PerformancePlanBean"/>
+		</property>
+	</bean>
+	
+	<bean id="RefundDao" class="dao.impl.RefundDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="refund">
+			<ref bean="RefundBean"/>
+		</property>
+	</bean>
+	
+	<bean id="RefundRuleDao" class="dao.impl.RefundRuleDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="refundRule">
+			<ref bean="RefundRuleBean"/>
+		</property>
+	</bean>
+	
+	<bean id="SettleIncomeDao" class="dao.impl.SettleIncomeDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="settleIncome">
+			<ref bean="SettleIncomeBean"/>
+		</property>
+	</bean>
+	
+	<bean id="SettleRuleDao" class="dao.impl.SettleRuleDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="settleRule">
+			<ref bean="SettleRuleBean"/>
+		</property>
+	</bean>
+	
+	<bean id="SoldSeatDao" class="dao.impl.SoldSeatDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="soldSeat">
+			<ref bean="SoldSeatBean"/>
+		</property>
+	</bean>
+	
+	<bean id="TicketsInfoDao" class="dao.impl.TicketsInfoDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="ticketsInfo">
+			<ref bean="TicketsInfoBean"/>
+		</property>
+	</bean>
+	
+	<bean id="VenueAccountDao" class="dao.impl.VenueAccountDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="venueAccount">
+			<ref bean="VenueAccountBean"/>
+		</property>
+	</bean>
+	
+	<bean id="VenueApplicantDao" class="dao.impl.VenueApplicantDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="venueApplicant">
+			<ref bean="VenueApplicantBean"/>
+		</property>
+	</bean>
+	
+	<bean id="VenueApplicationDao" class="dao.impl.VenueApplicationDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="venueApplication">
+			<ref bean="VenueApplicationBean"/>
+		</property>
+	</bean>
+	
+	<bean id="VenueDao" class="dao.impl.VenueDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="venue">
+			<ref bean="VenueBean"/>
+		</property>
+	</bean>
+	
+	<bean id="VenueUpdateDao" class="dao.impl.VenueUpdateDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="venueUpdate">
+			<ref bean="VenueUpdateBean"/>
+		</property>
+	</bean>
+	
+	<bean id="VerifyEmailDao" class="dao.impl.VerifyEmailDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+		<property name="verifyEmail">
+			<ref bean="VerifyEmailBean"/>
+		</property>
+	</bean>
+	
+	
+	<!-- Bean的Spring配置 -->
+	<bean id="CouponBean"  class="po.CouponBean"></bean>
+	
+	<bean id="CouponRuleBean" class="po.CouponRuleBean"></bean>
+	
+	<bean id="MemberBean" class="po.MemberBean"></bean>
+	
+	<bean id="MemberCardBean" class="po.MemberCardBean"></bean>
+	
+	<bean id="MemberPayBean" class="po.MemberPayBean"></bean>
+	
+	<bean id="MemberRuleBean" class="po.MemberRuleBean"></bean>
+	
+	<bean id="OrderBean" class="po.OrderBean"></bean>
+	
+	<bean id="OrderPayBean" class="po.OrderPayBean"></bean>
+	
+	<bean id="PayAccountBean" class="po.PayAccountBean"></bean>
+	
+	<bean id="PerformancePlanBean" class="po.PerformancePlanBean"></bean>
+	
+	<bean id="RefundBean" class="po.RefundBean"></bean>
+	
+	<bean id="RefundRuleBean" class="po.RefundRuleBean"></bean>
+	
+	<bean id="SettleIncomeBean" class="po.SettleIncomeBean"></bean>
+	
+	<bean id="SettleRuleBean" class="po.SettleRuleBean"></bean>
+	
+	<bean id="SoldSeatBean" class="po.SoldSeatBean"></bean>
+	
+	<bean id="TicketsInfoBean" class="po.TicketsInfoBean"></bean>
+	
+	<bean id="VenueAccountBean" class="po.VenueAccountBean"></bean>
+	
+	<bean id="VenueApplicantBean" class="po.VenueApplicantBean"></bean>
+	
+	<bean id="VenueApplicationBean" class="po.VenueApplicationBean"></bean>
+	
+	<bean id="VenueBean" class="po.VenueBean"></bean>
+	
+	<bean id="VenueUpdateBean" class="po.VenueUpdateBean"></bean>
+	
+	<bean id="VerifyEmailBean" class="po.VerifyEmailBean"></bean>
+	
+</beans>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Spring配置文件的根元素，使用spring-beans-4.0.xsd语言约束 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+
+	<!-- 配置具体的调度事项 -->
+	<bean id="quartzJob" class="service.impl.OrderService" />
+	   
+	<bean id="printJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="quartzJob"/>
+		<property name="targetMethod" value="deleteUnpaidOrder"/>
+	</bean>
+	
+	<!-- 使用CronTrigger来配置任务时间参数  -->
+	<bean id="printTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="printJobDetail"/>
+		<property name="cronExpression" value="0 0/15 * * * ?"/>	<!-- 时间设置为每15分钟执行一次任务 -->
+	</bean>
+	
+	<!-- 配置调度工厂，用于管理调度对象 -->
+	<bean class="org.springframework.scheduling.quartz.ScheduleFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="printJobDetail"/><!-- 调度任务 -->
+			</list>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="printTrigger"/><!-- 调度任务的时间 -->
+			</list>
+		</property>
+	</bean>
+	
+</beans>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-场馆-发布计划</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<script src="js/bootstrap-datetimepicker.js"></script>
+<script src="js/bootstrap-datetimepicker.fr.js"></script>
+<script src="js/moment.js"></script> 
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<!-- 模态框 -->
+<div class="modal fade" id="releasePlan" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">发布演出计划</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="modal-form-info">
+	            	<form class="form-inline" role="form" method="post" id="plan_form">
+	            		<label>演出名称 <input type="text" class="text" name="ppname"></label>
+	            		<p></p>
+		        		<label>演出类型</label>
+	           			<div id="performanceCategory" style="margin-left:15%; margin-top:-2.2em;">
+							<label class="checkbox-inline">
+								<input type="radio" name="performanceCategory" id="optionsRadios1" value="C">演唱会
+							</label>
+							<label class="checkbox-inline">
+						    	<input type="radio" name="performanceCategory" id="optionsRadios2" value="M">音乐会
+						    </label>
+						    <label class="checkbox-inline">
+						    	<input type="radio" name="performanceCategory" id="optionsRadios3" value="D">话剧
+						    </label>
+						</div>
+						<p></p>
+						<label>演出简介 <input type="text" class="text" name="briefIntro" style="width:280px;"></label>
+						<p></p>
+		           		<label>开始时间</label>
+				        <div class="form-group">
+				            <div class='input-group date' id='datetimepicker1' style="width:200px;">
+				                <input type='text' class="form-control" name="startTime" style="width:90%"/>
+				                <span class="input-group-addon" style="margin-left:-30px; padding:8px 8px;">
+			                		<span class="glyphicon glyphicon-calendar"></span>
+				                </span>
+				            </div>
+				        </div>
+				        <p style="margin-top:20px;"></p>
+						<label>结束时间</label>
+				        <div class="form-group">
+				            <div class='input-group date' id='datetimepicker2' style="width:200px;">
+				                <input type='text' class="form-control" name="endTime" style="width:90%"/>
+				                <span class="input-group-addon" style="margin-left:-20px; padding:8px 8px;">
+			                		<span class="glyphicon glyphicon-calendar"></span>
+				                </span>
+				            </div>
+				        </div>
+						<p></p>
+						<label>VIP类座位价格<input type="text" class="text" name="seatVipPrice" style="width:40%;">元/人</label>
+						<label>A类座位价格<input type="text" class="text" name="seatAPrice" style="width:40%;">元/人</label>
+						<label>B类座位价格<input type="text" class="text" name="seatBPrice" style="width:40%;">元/人</label>
+						<p></p>
+						<label>C类座位价格<input type="text" class="text" name="seatCPrice" style="width:40%;">元/人</label> 
+						<label>D类座位价格<input type="text" class="text" name="seatDPrice" style="width:40%;">元/人</label>
+						<p style="margin-top:20px;"></p>
+						<label class="hvr-sweep-to-right" style="margin-top: 10px; margin-left:150px;">
+							<input type="button" id="releaseBtn" value="发布计划">
+						</label>
+		            </form>
+	            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(function () {
+    $('#datetimepicker1').datetimepicker({
+    	minView: 0,//选择日期后，再跳转去选择时分秒
+ 	    minuteStep:1,//选择分钟时显示的时间间隔，此处设置为1分钟
+    	format: 'yyyy-mm-dd hh:ii',//选择日期后，文本框显示的日期格式
+    	autoclose: true//选择日期后自动关闭
+    });
+    $('#datetimepicker2').datetimepicker({
+    	minView: 0,//选择日期后，再跳转去选择时分秒
+ 	    minuteStep:1,//选择分钟时显示的时间间隔，此处设置为1分钟
+    	format: 'yyyy-mm-dd hh:ii',//选择日期后，文本框显示的日期格式
+    	autoclose: true//选择日期后自动关闭
+    });
+});
+</script>
+
+<div class="modal fade" id="planDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><b>演出计划详情</b></h4>
+            </div>
+            <div class="modal-body">
+            	<div>
+            		<label>演出编号： </label><span id="ppid"></span>
+            		<label style="margin-left:20px;">演出类型： </label><span id="ppCategory"></span>
+            		<label style="margin-left:20px;">演出名称： </label><span id="ppname"></span>
+            		<p></p>
+            		<label>简要介绍： </label><span id="briefIntro"></span>
+            		<p></p>
+            		<label>开始时间： </label><span id="startTime"></span>
+					<label style="margin-left:20px;">结束时间：</label><span id="endTime"></span>
+					<p></p>
+					<label>VIP类座位价格：</label><span id="seatVipPrice"></span>元/人
+					<label style="margin-left:15px;">A类座位价格：</label><span id="seatAPrice"></span>元/人
+					<label style="margin-left:15px;">B类座位价格：</label><span id="seatBPrice"></span>元/人
+					<label style="margin-left:15px;">C类座位价格：</label><span id="seatCPrice"></span>元/人
+					<label style="margin-left:15px;">D类座位价格：</label><span id="seatDPrice"></span>元/人
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>场馆</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>发布计划</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+        	<li><a href="venueSetting.html">场馆设置</a></li>
+        	<li class="active"><a href="venueReleasePlan.html">发布计划</a></li>
+        	<li><a href="venueSearchPerformance.html">演出售票</a></li>
+        	<li><a href="venueCheckIn.html">演出检票</a></li>
+        	<li><a href="venueStatistics.html">统计信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>演出计划</label>
+        		<a href='#' data-toggle='modal' data-target='#releasePlan' id="releasePlanHref"  style="margin-left:580px;">发布新计划</a>
+   			</div>
+	    	<div class="panel-body">
+	    		<div class="panel-form-info" id="planInfo">
+				</div>
+	    	</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+var ppid = 0;
+
+function getPpid(obj){
+	ppid = obj.getAttribute("id");
+}
+
+$(document).ready(function () {
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'V') {//场馆已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到场馆登录页面
+				window.location.href="/Tickets/home?pageId=16";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到场馆登录页面
+			window.location.href="/Tickets/home?pageId=16";
+		}
+	});
+	
+	//更新演出计划信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/venueShowAllPerformancePlanList",
+		"type":"GET",
+		"dataType":"json",
+		"success": function(data){
+			if(data != "fail"){//演出计划信息存在
+				var dataValue = eval(data);
+				var length = dataValue.length;
+	
+				var insertText = "";
+				for(var i=0; i<length; i++) {
+					insertText += "<a href='#' onclick='getPpid(this)' data-toggle='modal' data-target='#planDetail' class='list-group-item' id="+dataValue[i].ppid+">"+
+		 			"<h4 class='list-group-item-heading'>计划编号：<span>"+dataValue[i].ppid+"</span></h4>"+
+		 			"<label>演出名称：</label><span>"+dataValue[i].ppname+"</span>"+
+		 			"<label style='margin-left: 20px;'>演出类型：</label><span>"+dataValue[i].ppCategory+"</span></a>";
+				}
+				document.getElementById('planInfo').innerHTML = insertText;
+			}
+			else {
+				document.getElementById('planInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">还没有已经发布的计划哦！</div>';
+			}
+		},
+		"error":function(data){
+			document.getElementById('planInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">还没有已经发布的计划哦！</div>';
+		}
+	});
+	
+
+	//点击某一个场馆申请查看详情时的模态框事件
+	$('#planDetail').on('show.bs.modal', function () {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/venueShowPerformancePlanDetail",
+	        data:{"ppid":ppid},
+	        type:"POST",
+	        dataType:"json",
+	        async:false,
+	        success:function (data){
+	        	if(data != "fail"){//场馆开办申请信息存在
+		            var dataValue = eval(data);
+		            
+		            document.getElementById("ppid").innerHTML = dataValue.ppid;
+		            document.getElementById("ppname").innerHTML = dataValue.ppname;
+		            document.getElementById("ppCategory").innerHTML = dataValue.ppCategory;
+		            document.getElementById("briefIntro").innerHTML = dataValue.briefIntro;
+		            document.getElementById("startTime").innerHTML = dataValue.startTime;
+		            document.getElementById("endTime").innerHTML = dataValue.endTime;
+		            document.getElementById("seatVipPrice").innerHTML = dataValue.seatVipPrice;
+		            document.getElementById("seatAPrice").innerHTML = dataValue.seatAPrice;
+		            document.getElementById("seatBPrice").innerHTML = dataValue.seatBPrice;
+		            document.getElementById("seatCPrice").innerHTML = dataValue.seatCPrice;
+		            document.getElementById("seatDPrice").innerHTML = dataValue.seatDPrice;
+	        	}
+	        }
+	    });
+	});	
+	
+	//“发布计划”按钮点击事件
+	$('#releaseBtn').click(function() {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/venueReleasePlan",
+	        type:"POST",
+	        data:$("#plan_form").serialize(),
+	        success:function (data) {
+	        	if(data != "fail") {
+		        	alert("发布成功，演出计划编号为"+data+"。");
+		        }
+	        	else {
+	        		alert("发布失败，演出计划时间已过。");
+	        	}
+	        	setTimeout('jumpTo(19)',2000);
+	        }
+	    });
+	});
+
+});
+
+function jumpTo(pageId) {
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-会员-票务预订</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>会员</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>订单支付</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+        	<li><a href="memberPersonalSetting.html">个人设置</a></li>
+        	<li><a href="memberCardInfo.html">会员卡信息</a></li>
+        	<li class="active"><a href="memberSearchPerformance.html">票务预订</a></li>
+        	<li><a href="memberManageOrder.html">订单管理</a></li>
+        	<li><a href="memberStatistics.html">统计信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>订单信息</label>
+   			</div>
+	    	<div class="panel-body">
+	    		<div id="orderInfo">
+		    		<label>订单编号：</label><span id="oid"></span>
+	           		<p></p>
+	           		<label>座位类型：</label><span id="seatCategory"></span>
+	           		<label style="margin-left:20px;">该类型座位单价：</label><span id="seatPrice"></span>元/人
+	           		<label style="margin-left:20px;">购座数量：</label><span id="seatNum"></span>
+	           		<p></p>
+	           		<label>原始金额：</label><span id="originMoney"></span>元
+	           		<label style="margin-left:20px;">折扣后金额：</label><span id="realMoney"></span>元
+	           		<p></p>
+	           		<label>座位号：</label><span id="soldSeats"></span>
+	           		<p></p>
+	    		</div>
+	    	</div>
+		</div>
+		<div class="clearfix" style="height:2em;"></div>
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+			<div class="panel-heading">
+        		<label>优惠券信息</label>
+   			</div>
+	    	<div class="panel-body">
+	    		<div id="couponInfo">
+	    		</div>
+	    	</div>
+		</div>
+		<div class="clearfix" style="height:2em;"></div>
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+			<div class="panel-heading">
+        		<label>支付账户</label>
+   			</div>
+	    	<div class="panel-body">
+	    		<div id="payAcntInfo">
+	    		</div>
+	    	</div>
+		</div>
+		<div class="clearfix" style="height:2em;"></div>
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+			<div class="panel-heading">
+        		<label>支付信息确认</label>
+   			</div>
+	    	<div class="panel-body">
+	    		<div>
+	    			<label>支付金额：</label><span id="payMoney"></span>元
+	    			<p></p>
+	    			<label>该账户支付密码：</label><input type="password" id="payPasswd">
+	    			<div class="form-submit" id="login-submit">
+						<h5><a class="hvr-sweep-to-right">
+        					<input id="payBtn" type="button" value="支付"></input>
+      					</a></h5>
+      				</div>
+      				<div id="payInfo"></div>
+	    		</div>
+	    	</div>
+		</div>
+	</div>
+</div>
+        
+<script>
+
+//获取上一个页面传来的订单编号的变量值
+var thisURL = document.URL;  
+var oid = (thisURL.split('?')[1]).split("=")[1];
+
+$(document).ready(function () {
+
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'M') {//会员已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到会员登录页面
+				window.location.href="/Tickets/home?pageId=3";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到会员登录页面
+			window.location.href="/Tickets/home?pageId=3";
+		}	
+	});
+	
+	//更新订单信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/showOrderDetail",
+		"type":"POST",
+		"data":{"oid":oid},
+		"dataType":"json",
+		"success": function(data) {
+			if(data != "fail") {//演出信息存在
+        		var dataValue = eval(data);
+				
+				document.getElementById('oid').innerHTML = dataValue.oid;
+				document.getElementById('seatCategory').innerHTML = dataValue.seatCategory;
+				document.getElementById('seatPrice').innerHTML = dataValue.seatPrice;
+				document.getElementById('seatNum').innerHTML = dataValue.seatNum;
+				document.getElementById('originMoney').innerHTML = dataValue.originMoney;
+				document.getElementById('realMoney').innerHTML = dataValue.realMoney;
+				document.getElementById('soldSeats').innerHTML = dataValue.seats;
+				
+				//将支付金额的值初始化为折扣后的实际金额
+				document.getElementById('payMoney').innerHTML = $("#realMoney").text();
+
+				//将单选框中大于折扣后金额的优惠券选项设为不可点击
+				var arr = document.getElementsByName("coupon");
+				for(var i=0; i<arr.length; i++){
+					var thisCouponValue = arr[i].value;
+					if(thisCouponValue - $("#realMoney").text() > 0) {
+						arr[i].disabled = true;
+					}
+				}
+			}
+		},
+		"error":function(data) {
+		}
+	});
+	
+	//更新优惠券信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/memberShowCouponList",
+		"type":"GET",
+		"dataType":"json",
+        "async":false,
+		"success": function(data) {
+			if(data != "fail") {//优惠券信息存在
+				var dataValue = eval(data);
+				var length = dataValue.length;
+
+				if(length > 0) {
+					var insertText = "<div id='coupon'>";
+					for(var i=0; i<length;i++) {//将每个优惠券信息加入单选框列表中
+						insertText += "<input type='radio' name='coupon' id='"+dataValue[i].cpnId+"' value='"+dataValue[i].cpnMoney+"' style='margin-left:5px;'>"+dataValue[i].cpnMoney+"元优惠券（满"+dataValue[i].cpnMoney+"元可用）";
+					}
+					
+					document.getElementById('couponInfo').innerHTML = insertText;
+					
+				}
+				else {
+					document.getElementById('couponInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">没有可用的优惠券</div>';
+				}
+			}
+			else{
+				document.getElementById('couponInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">还没有可用优惠券！</div>';
+			}
+		},
+		"error":function(data) {
+			document.getElementById('couponInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">还没有可用优惠券！</div>';
+		}
+	});
+	
+	//更新支付账户信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/memberShowPayAccountList",
+		"type":"GET",
+		"dataType":"json",
+        "async":false,
+		"success": function(data) {
+			if(data != "fail") {//支付账户信息存在
+				var dataValue = eval(data);
+				var length = dataValue.length;
+
+				if(length > 0) {
+					var insertText = "<div id='payAcnt'>";
+					for(var i=0; i<length;i++) {//将每个支付账户信息加入单选框列表中
+						insertText += "<input type='radio' name='payAcnt' id='"+dataValue[i].category+"-"+dataValue[i].acntName+"' style='margin-left:5px;'>"+dataValue[i].category+"  "+dataValue[i].acntName;
+					}
+					document.getElementById('payAcntInfo').innerHTML = insertText;
+				}
+				else {
+					document.getElementById('payAcntInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">还没有绑定支付账户，请先绑定支付账户再来付款！</div>';
+				}
+			}
+			else{
+				document.getElementById('payAcntInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">还没有绑定支付账户！</div>';
+			}
+		},
+		"error":function(data) {
+		}
+	});
+	
+	//给优惠券选项加监听事件
+	$('input[type=radio][name=coupon]').change(function() {//当“优惠券”被选中项有更新时
+    	var couponVal = $('input:radio[name="coupon"]:checked').val();//获取选中的优惠券的金额
+        if(couponVal != null) {//如果“优惠券”已有被选中项
+        	document.getElementById('payMoney').innerHTML = $("#realMoney").text() - couponVal;
+        }
+        else {
+        	document.getElementById('payMoney').innerHTML = $("#realMoney").text();
+        }
+    });
+	
+	//"支付按钮"点击事件
+	$('#payBtn').click(function() {
+		//获取被选中的优惠券的编号
+		var couponId = $('input:radio[name="coupon"]:checked').attr("id");
+		if(couponId == null || couponId == undefined) {//用户没有选择使用优惠券
+			couponId = 0;	
+		}
+		
+		//获取被选中的支付账户的属性
+		var payAcntId = $('input:radio[name="payAcnt"]:checked').attr("id"); 
+		if(payAcntId == null || payAcntId == undefined) {//用户没有选择支付账户
+			document.getElementById('payInfo').innerHTML='<div class="alert alert-danger" role="alert"style="text-align: center">请选择支付账户</div>';
+		}
+		else {//用户选择了支付账户
+			var categoryStr = payAcntId.split("-")[0];
+			var acntName = payAcntId.split("-")[1];
+			var category;
+			if(categoryStr == "银行卡") {
+				category = "B";
+			}
+			else if(categoryStr == "微信") {
+				category = "W";
+			}
+			else{
+				category = "Z";
+			}
+			
+			$.ajax({
+		        url:"http://localhost:8080/Tickets/memberPayOrder",
+		        type:"POST",
+		        data:{"oid":oid, "cpnId":couponId, "category":category, "acntName":acntName, "password":$("#payPasswd").val()},
+		        success:function (data){
+		        	if(data == "success") {//支付成功
+		        		document.getElementById('payInfo').innerHTML='<div class="alert alert-success" role="alert" style="text-align: center">支付成功，即将跳转至票务预订页面</div>';
+		        		setTimeout('jumpTo(7)',3000);//跳转至票务预订页面
+		        	}
+					else{
+						document.getElementById('payInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">支付失败，'+data+'。</div>';
+		        	}
+		        }
+		    });
+		}
+	});
+	
+});
+
+function jumpTo(pageId){
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+
+</script>
+</body>
+</html>

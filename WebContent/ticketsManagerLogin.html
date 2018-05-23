@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-集团经理登录</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=3" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>会员登录/注册</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=16" id="havetochange2"><i class="glyphicon glyphicon-user"> </i>场馆登录/申请</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=24" id="havetochange3"><i class="glyphicon glyphicon-user"> </i>集团经理登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>集团经理登录</h3>
+		<div class="login-top">
+			<div class="form-info">
+				<form method="post" id="login_form" style="vertical-align:middle;">
+					<input type="text" id="mgrId" class="text" name="mgrId" placeholder="经理编号">
+					<input type="password" id="mgrPassword" name="mgrPassword"  placeholder="登录密码">
+					<div class="form-submit" id="login-submit">
+						<h5><a class="hvr-sweep-to-right">
+        					<input id="loginBtn" type="button" value="登录"></input>
+      					</a></h5>
+      				</div>
+				</form>
+				<div id="loginInfo"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	$('#loginBtn').click(function(){
+		if($('#mgrId').val()==undefined||$('#mgrPassword').val()==undefined){
+			document.getElementById('loginInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">请填写完整经理信息！</div>';
+		}else{
+			$.ajax({
+				url:"http://localhost:8080/Tickets/managerLogin",
+				type:"POST",
+				data:$("#login_form").serialize(),
+				success:function(data){
+					if(data=="success"){//登录成功，给出成功提示
+						document.getElementById('loginInfo').innerHTML='<div class="alert alert-success" role="alert"style="text-align: center">登录成功!即将跳转至经理首页……</div>';
+						setTimeout('jumpTo(25)',3000);//跳转至经理首页
+					}
+					else{//登录失败，给出错误提示
+						document.getElementById('loginInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">登录失败，'+data+' </div>';
+					}
+				}
+			});
+		}
+	});
+});
+
+function jumpTo(pageId){
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+
+</script>
+</body>
+</html>

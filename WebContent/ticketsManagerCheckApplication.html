@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-集团经理-审批申请</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<!-- 模态框  -->
+<div class="modal fade" id="applicationDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><b>审批场馆开办申请</b></h4>
+            </div>
+            <div class="modal-body">
+            	<div id="checkApplication">
+            		<label>申请编号：</label> <span id="app_vaid"></span>
+            		<label style="margin-left:20px;">申请者编号： </label><span id="app_vaerid"></span>
+            		<label style="margin-left:20px;">场馆名称： </label><span id="app_vname"></span>
+            		<p></p>
+            		<label>所在省市： </label><span id="app_province"></span><span id="app_city"></span><span id="app_area"></span>
+					<label style="margin-left:20px;">场馆地址：</label><span id="app_address"></span>
+					<p></p>
+					<label>VIP类座位排数：</label><span id="app_seatVipRowNum"></span>
+					<label style="margin-left:20px;">VIP类座位列数：</label><span id="app_seatVipColNum"></span>
+					<p></p>
+            		<label>A类座位排数：</label><span id="app_seatARowNum"></span>
+					<label style="margin-left:20px;">A类座位列数：</label><span id="app_seatAColNum"></span>
+					<p></p>
+            		<label>B类座位排数：</label><span id="app_seatBRowNum"></span>
+					<label style="margin-left:20px;">B类座位列数：</label><span id="app_seatBColNum"></span>
+					<p></p>
+            		<label>C类座位排数：</label><span id="app_seatCRowNum"></span>
+					<label style="margin-left:20px;">C类座位列数：</label><span id="app_seatCColNum"></span>
+					<p></p>
+            		<label>D类座位排数：</label><span id="app_seatDRowNum"></span>
+					<label style="margin-left:20px;">D类座位列数：</label><span id="app_seatDColNum"></span>
+            	</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="passApplication">通过</button>
+                <button type="button" class="btn btn-primary" id="notPassApplication">不通过</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><b>审批场馆更新申请</b></h4>
+            </div>
+            <div class="modal-body">
+            	<div id="checkApplication">
+            		<label>更新编号： </label><span id="upd_vuid"></span>
+            		<label style="margin-left:20px;">场馆编号：</label><span id="upd_vid"></span>
+            		<label style="margin-left:20px;">场馆名称：</label><span id="upd_vname"></span>
+            		<p></p>
+            		<label>所在省市： </label><span id="upd_province"></span><span id="upd_city"></span><span id="upd_area"></span>
+					<label style="margin-left:20px;">场馆地址：</label><span id="upd_address"></span>
+					<p></p>
+            		<label>VIP类座位排数：</label><span id="upd_seatVipRowNum"></span>
+					<label style="margin-left:20px;">VIP类座位列数：</label><span id="upd_seatVipColNum"></span>
+					<p></p>
+            		<label>A类座位排数：</label><span id="upd_seatARowNum"></span>
+					<label style="margin-left:20px;">A类座位列数：</label><span id="upd_seatAColNum"></span>
+					<p></p>
+            		<label>B类座位排数：</label><span id="upd_seatBRowNum"></span>
+					<label style="margin-left:20px;">B类座位列数：</label><span id="upd_seatBColNum"></span>
+					<p></p>
+            		<label>C类座位排数：</label><span id="upd_seatCRowNum"></span>
+					<label style="margin-left:20px;">C类座位列数：</label><span id="upd_seatCColNum"></span>
+					<p></p>
+            		<label>D类座位排数：</label><span id="upd_seatDRowNum"></span>
+					<label style="margin-left:20px;">D类座位列数：</label><span id="upd_seatDColNum"></span>
+            	</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="passUpdate">通过</button>
+                <button type="button" class="btn btn-primary" id="notPassUpdate">不通过</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>经理</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>审批申请</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+    		<li class="active"><a href="ticketsManagerCheckApplication.html">审批申请</a></li>
+        	<li><a href="ticketsManagerSettleIncome.html">结算收入</a></li>
+        	<li><a href="ticketsManagerStatistics.html">统计信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+			<div class="panel-heading">
+	       		<label>场馆开办申请</label>
+	  		</div>
+	    	<div class="panel-body" id="applicationInfo">
+	    	</div>
+	    </div>
+    	<div class="clearfix" style="height:2em;"></div>
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>场馆更新申请</label>
+   			</div>
+	    	<div class="panel-body" id="updateInfo">
+	    	</div>
+		</div>
+	</div>
+</div>
+        
+
+<script type="text/javascript">
+
+var vaid = 0;
+var vuid = 0;
+
+function getVaid(obj){
+	vaid = obj.getAttribute("id");
+}
+
+function getVuid(obj){
+	vuid = obj.getAttribute("id");
+}
+
+$(document).ready(function () {
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'T') {//经理已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到经理登录页面
+				window.location.href="/Tickets/home?pageId=24";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到经理登录页面
+			window.location.href="/Tickets/home?pageId=24";
+		}
+	});
+
+	//更新场馆开办申请信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/managerShowApplicationList",
+		"type":"GET",
+		"dataType":"json",
+		"success": function(data){
+			if(data != "fail"){//场馆开办申请信息存在
+				var dataValue = eval(data);
+				var length = dataValue.length;
+	
+				var insertText = "";
+				for(var i=0; i<length; i++) {
+					insertText += "<a href='#' onclick='getVaid(this)' data-toggle='modal' data-target='#applicationDetail' class='list-group-item' id="+dataValue[i].vaid+">"+
+		 			"<h4 class='list-group-item-heading'>申请编号：<span>"+dataValue[i].vaid+"</span></h4>"+
+		 			"<label>申请者编号：</label><span>"+dataValue[i].vaerid+"</span>"+
+		 			"<label style='margin-left: 50px;'>申请场馆名：</label><span>"+dataValue[i].vname+"</span></a>";
+				}
+				document.getElementById('applicationInfo').innerHTML = insertText;
+			}
+			else {
+				document.getElementById('applicationInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">暂时没有需要审核的场馆开办申请！</div>';
+			}
+		},
+		"error":function(data){
+			document.getElementById('applicationInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">暂时没有需要审核的场馆开办申请！</div>';
+		}
+	});
+
+	//更新场馆更新申请信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/managerShowUpdateList",
+		"type":"GET",
+		"dataType":"json",
+		"success": function(data){
+			if(data != "fail"){//场馆更新申请信息存在
+				var dataValue = eval(data);
+				var length = dataValue.length;
+	
+				var insertText = "";
+				for(var i=0; i<length; i++) {
+					insertText += "<a href='#' onclick='getVuid(this)' data-toggle='modal' data-target='#updateDetail' class='list-group-item' id="+dataValue[i].vuid+">"+
+		 			"<h4 class='list-group-item-heading'>更新编号：<span>"+dataValue[i].vuid+"</span></h4>"+
+		 			"<label>场馆编号：</label><span>"+dataValue[i].vid+"</span>"+
+		 			"<label style='margin-left: 50px;'>更新场馆名：</label><span>"+dataValue[i].vname+"</span></a>";
+				}
+				document.getElementById('updateInfo').innerHTML = insertText;
+			}
+			else {
+				document.getElementById('updateInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">暂时没有需要审核的场馆更新申请！</div>';
+			}
+		},
+		"error":function(data){
+			document.getElementById('updateInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">暂时没有需要审核的场馆更新申请！</div>';
+		}
+	});
+
+	//点击某一个场馆开办申请查看详情时的模态框事件
+	$('#applicationDetail').on('show.bs.modal', function () {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/managerShowApplicationDetail",
+	        data:{"vaid":vaid},
+	        type:"POST",
+	        dataType:"json",
+	        async:false,
+	        success:function (data){
+	        	if(data != "fail"){//场馆开办申请信息存在
+		            var dataValue = eval(data);
+		            
+		            document.getElementById("app_vaid").innerHTML = dataValue.vaid;
+		            document.getElementById("app_vaerid").innerHTML = dataValue.vaerid;
+		            document.getElementById("app_vname").innerHTML = dataValue.vname;
+		            document.getElementById("app_province").innerHTML = dataValue.province;
+		            document.getElementById("app_city").innerHTML = dataValue.city;
+		            document.getElementById("app_area").innerHTML = dataValue.area;
+		            document.getElementById("app_address").innerHTML = dataValue.address;
+		            document.getElementById("app_seatVipRowNum").innerHTML = dataValue.seatVipRowNum;
+		            document.getElementById("app_seatVipColNum").innerHTML = dataValue.seatVipColNum;
+		            document.getElementById("app_seatARowNum").innerHTML = dataValue.seatARowNum;
+		            document.getElementById("app_seatAColNum").innerHTML = dataValue.seatAColNum;
+		            document.getElementById("app_seatBRowNum").innerHTML = dataValue.seatBRowNum;
+		            document.getElementById("app_seatBColNum").innerHTML = dataValue.seatBColNum;
+		            document.getElementById("app_seatCRowNum").innerHTML = dataValue.seatCRowNum;
+		            document.getElementById("app_seatCColNum").innerHTML = dataValue.seatCColNum;
+		            document.getElementById("app_seatDRowNum").innerHTML = dataValue.seatDRowNum;
+		            document.getElementById("app_seatDColNum").innerHTML = dataValue.seatDColNum;
+	        	}
+	        }
+	    });
+	});	
+
+	//点击某一个场馆更新申请查看详情时的模态框事件
+	$('#updateDetail').on('show.bs.modal', function () {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/managerShowUpdateDetail",
+	        data:{"vuid":vuid},
+	        type:"POST",
+	        dataType:"json",
+	        async:false,
+	        success:function (data){
+	        	if(data != "fail"){//场馆更新申请信息存在
+		            var dataValue = eval(data);
+		            
+		            document.getElementById("upd_vuid").innerHTML = dataValue.vuid;
+		            document.getElementById("upd_vid").innerHTML = dataValue.vid;
+		            document.getElementById("upd_vname").innerHTML = dataValue.vname;
+		            document.getElementById("upd_province").innerHTML = dataValue.province;
+		            document.getElementById("upd_city").innerHTML = dataValue.city;
+		            document.getElementById("upd_area").innerHTML = dataValue.area;
+		            document.getElementById("upd_address").innerHTML = dataValue.address;
+		            document.getElementById("upd_seatVipRowNum").innerHTML = dataValue.seatVipRowNum;
+		            document.getElementById("upd_seatVipColNum").innerHTML = dataValue.seatVipColNum;
+		            document.getElementById("upd_seatARowNum").innerHTML = dataValue.seatARowNum;
+		            document.getElementById("upd_seatAColNum").innerHTML = dataValue.seatAColNum;
+		            document.getElementById("upd_seatBRowNum").innerHTML = dataValue.seatBRowNum;
+		            document.getElementById("upd_seatBColNum").innerHTML = dataValue.seatBColNum;
+		            document.getElementById("upd_seatCRowNum").innerHTML = dataValue.seatCRowNum;
+		            document.getElementById("upd_seatCColNum").innerHTML = dataValue.seatCColNum;
+		            document.getElementById("upd_seatDRowNum").innerHTML = dataValue.seatDRowNum;
+		            document.getElementById("upd_seatDColNum").innerHTML = dataValue.seatDColNum;
+	        	}
+	        }
+	    });
+	});	
+	
+	//点击“通过场馆开办申请”按钮时的事件
+	$('#passApplication').click(function(){
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/managerCheckApplication",
+	        data:{"vaid":vaid, "isPass":"true"},
+	        type:"GET",
+	        success:function (data){
+	        	if(data == "success"){
+		        	alert("审核成功");
+		        }
+	        	else {
+	        		alert("审核失败");
+	        	}
+	        	setTimeout('jumpTo(26)',1000);
+	        }
+	    });
+	});
+	
+	//点击“不通过场馆开办申请”按钮时的事件
+	$('#notPassApplication').click(function(){
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/managerCheckApplication",
+	        data:{"vaid":vaid, "isPass":"false"},
+	        type:"GET",
+	        success:function (data){
+	        	if(data == "success"){
+		        	alert("审核成功");
+		        }
+	        	else {
+	        		alert("审核失败");
+	        	}
+	        	setTimeout('jumpTo(26)',1000);
+	        }
+	    });
+	});
+
+	//点击“通过场馆更新申请”按钮时的事件
+	$('#passUpdate').click(function(){
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/managerCheckUpdate",
+	        data:{"vuid":vuid, "isPass":"true"},
+	        type:"GET",
+	        success:function (data){
+	        	if(data == "success"){
+		        	alert("审核成功");
+		        }
+	        	else {
+	        		alert("审核失败");
+	        	}
+	        	setTimeout('jumpTo(26)',1000);
+	        }
+	    });
+	});
+	
+	//点击“不通过场馆更新申请”按钮时的事件
+	$('#notPassUpdate').click(function(){
+		//alert($('#rechargeNum').val());
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/managerCheckUpdate",
+	        data:{"vuid":vuid, "isPass":"false"},
+	        type:"GET",
+	        success:function (data){
+	        	if(data == "success"){
+		        	alert("审核成功");
+		        }
+	        	else {
+	        		alert("审核失败");
+	        	}
+	        	setTimeout('jumpTo(26)',1000);
+	        }
+	    });
+	});
+	
+});
+
+function jumpTo(pageId){
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+</script>
+</body>
+</html>

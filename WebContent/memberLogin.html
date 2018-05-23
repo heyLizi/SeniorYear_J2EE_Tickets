@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-会员登录</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=3" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>会员登录/注册</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=16" id="havetochange2"><i class="glyphicon glyphicon-user"> </i>场馆登录/申请</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/home?pageId=24" id="havetochange3"><i class="glyphicon glyphicon-user"> </i>集团经理登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>会员登录</h3>
+		<div class="login-top">
+			<div class="form-info">
+				<form method="post" id="login_form" style="vertical-align:middle;">
+					<input type="text" id="mid" class="text" name="mid" placeholder="会员编号">
+					<input type="password" id="mpassword" name="mpassword"  placeholder="登录密码">
+					<div class="form-submit" id="login-submit">
+						<h5><a class="hvr-sweep-to-right">
+        					<input id="loginBtn" type="button" value="登录"></input>
+      					</a></h5>
+      				</div>
+				</form>
+				<div id="loginInfo"></div>
+			</div>
+			<div class="create">
+			<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="87.8%" color=#987cb9 SIZE=3>
+				<p>刚来Tickets？      →<a href="http://localhost:8080/Tickets/home?pageId=1">注册会员</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	$('#loginBtn').click(function() {
+		if($('#mid').val() == undefined || $('#mid').val() == "" || $('#mpassword').val() == undefined || $('#mpassword').val() == undefined) {
+			document.getElementById('loginInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">请填写完整会员信息！</div>';
+		}
+		else{
+			$.ajax({
+				url:"http://localhost:8080/Tickets/memberLogin",
+				type:"POST",
+				data:$("#login_form").serialize(),
+				success:function(data) {
+					if(data == "success"){//登录成功，给出成功提示
+						document.getElementById('loginInfo').innerHTML='<div class="alert alert-success" role="alert"style="text-align: center">登录成功!即将跳转至会员首页……</div>';
+						setTimeout('jumpTo(4)',3000);//跳转至会员首页
+					}
+					else{//登录失败，给出错误提示
+						document.getElementById('loginInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">登录失败，'+data+'</div>';
+					}
+				}
+			});
+		}
+	});
+});
+
+function jumpTo(pageId){
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-场馆-统计信息</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>场馆</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>统计信息</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+        	<li><a href="venueSetting.html">场馆设置</a></li>
+        	<li><a href="venueReleasePlan.html">发布计划</a></li>
+        	<li><a href="venueSearchPerformance.html">演出售票</a></li>
+        	<li><a href="venueCheckIn.html">演出检票</a></li>
+        	<li class="active"><a href="venueStatistics.html">统计信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>统计信息</label>
+   			</div>
+	    	<div class="panel-body">
+		    	<div style="margin-bottom:10px;">
+	        		<label style="margin-right:10px;">订单总数：</label><span id="orderTotal" class="text"></span>
+	        	</div>
+	        	<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">退订总数：</label><span id="refundTotal" class="text"></span>
+				</div>
+	        	<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">退订比例：</label><span id="refundPercent" class="text"></span>
+				</div>
+	        	<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">盈利总额：</label><span id="profitMoney" class="text"></span>元
+				</div>
+	    	</div>
+		</div>
+	</div>
+</div>
+        
+<script>
+$(document).ready(function () {
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'V') {//场馆已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到场馆登录页面
+				window.location.href="/Tickets/home?pageId=16";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到场馆登录页面
+			window.location.href="/Tickets/home?pageId=16";
+		}
+	});
+	
+	//更新场馆统计信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/venueStatistics",
+		"type":"GET",
+		"dataType":"json",
+        "async":false,
+		"success": function(data) {
+			if(data != "fail") {//场馆统计信息存在
+				var dataValue = eval(data);
+
+	            document.getElementById("orderTotal").innerHTML = dataValue.orderTotalNum;
+	            document.getElementById("refundTotal").innerHTML = dataValue.refundTotalNum;
+				document.getElementById("refundPercent").innerHTML = dataValue.refundPercent;
+	            document.getElementById("profitMoney").innerHTML = dataValue.profitMoney;
+			}
+		},
+		"error":function(data) {
+		}
+	});
+	
+});
+</script>
+</body>
+</html>

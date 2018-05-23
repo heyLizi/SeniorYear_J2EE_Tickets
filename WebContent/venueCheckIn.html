@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-场馆-演出检票</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<!-- 模态框 -->
+<div class="modal fade" id="checkin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">检票入场</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="form-info">
+	            	<form class="form-inline" role="form" method="post" id="checkin_form">
+	            		<label>演出编号：</label><span class="text" id="ppid"></span>
+	            		<p></p>
+			        	<label>座位排号：</label>
+			        	<input class="form-control" type="text" id="seatRow">
+	            		<p></p>
+						<label>座位列号：</label>
+		            	<input class="form-control" type="text" id="seatCol">
+		            	<p></p>
+					    <div style="width:20%; margin:0 auto; text-align:middle;">
+            				<label class="hvr-sweep-to-right">
+				           		<input id="checkinBtn" type="button" value="检票进场">
+				    		</label>
+				    	</div>
+	            	</form>
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>场馆</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>演出检票</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+        	<li><a href="venueSetting.html">场馆设置</a></li>
+        	<li><a href="venueReleasePlan.html">发布计划</a></li>
+        	<li><a href="venueSearchPerformance.html">演出售票</a></li>
+        	<li class="active"><a href="venueCheckIn.html">演出检票</a></li>
+        	<li><a href="venueStatistics.html">统计信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>演出信息</label>
+   			</div>
+	    	<div class="panel-body">
+		    	<div id="performanceInfo">
+	    		</div>
+	    	</div>
+		</div>
+	</div>
+</div>
+        
+<script>
+
+var ppid = 0;
+
+function getPpid(obj){
+	ppid = obj.getAttribute("id");
+}
+
+$(document).ready(function () {
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'V') {//场馆已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到场馆登录页面
+				window.location.href="/Tickets/home?pageId=16";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到场馆登录页面
+			window.location.href="/Tickets/home?pageId=16";
+		}
+	});
+	
+	//更新演出计划信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/venueShowAvailPerformancePlanList",
+		"type":"GET",
+		"dataType":"json",
+		"success": function(data){
+			if(data != "fail"){//演出计划信息存在
+				var dataValue = eval(data);
+				var length = dataValue.length;
+	
+				var insertText = "";
+				for(var i=0; i<length; i++) {
+					insertText += "<a href='#' onclick='getPpid(this)' data-toggle='modal' data-target='#checkin' class='list-group-item' id="+dataValue[i].ppid+">"+
+		 			"<h4 class='list-group-item-heading'>演出编号：<span>"+dataValue[i].ppid+"</span></h4>"+
+		 			"<label>演出名称：</label><span>"+dataValue[i].ppname+"</span>"+
+		 			"<label style='margin-left: 20px;'>演出类型：</label><span>"+dataValue[i].ppCategory+"</span><div></div>"+
+		 			"<label>简要介绍：</label><span>"+dataValue[i].briefIntro+"</span><div></div>"+
+		 			"<label>开始时间：</label><span>"+dataValue[i].startTime+"</span>"+
+		 			"<label style='margin-left: 20px;'>结束时间：</label><span>"+dataValue[i].endTime+"</span></a>";
+				}
+				document.getElementById('performanceInfo').innerHTML = insertText;
+			}
+			else {
+				document.getElementById('performanceInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">本场馆还没有可检票的演出！</div>';
+			}
+		},
+		"error":function(data){
+			document.getElementById('performanceInfo').innerHTML = '<div class="alert alert-danger" role="alert" style="text-align: center">本场馆还没有可检票的演出！</div>';
+		}
+	});
+	
+	//点击某一个场馆申请查看详情时的模态框事件
+	$('#checkin').on('show.bs.modal', function () {
+		document.getElementById("ppid").innerHTML = ppid;  
+	});
+	
+	//“检票入场”按钮点击事件
+	$('#checkinBtn').click(function() {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/venueCheckin",
+	        type:"POST",
+	        data:{"ppid":ppid, "seatRow":$('#seatRow').val(), "seatCol":$('#seatCol').val()},
+	        success:function (data) {
+	        	if(data == "success") {
+		        	alert("检票成功");
+		        }
+	        	else {
+	        		alert("检票失败，"+data);
+	        	}
+	        	setTimeout('jumpTo(22)',2000);
+	        }
+	    });
+	});
+	
+});
+
+function jumpTo(pageId) {
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+</script>
+</body>
+</html>

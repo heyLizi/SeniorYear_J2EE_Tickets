@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tickets-场馆-场馆设置</title>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+<script src="js/distpicker.data.js"></script>
+<script src="js/distpicker.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="css/styles.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<body>
+
+<!-- 模态框 -->
+<div class="modal fade" id="modifyIdInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">账号信息</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="form-info">
+	            	<form class="form-inline" role="form" method="post" id="rgtInfo_form">
+			        	<label>场馆编号：</label>
+			        	<span id="vid"></span>
+	            		<p></p>
+						<label>新的密码</label>
+		            	<input class="form-control" type="password" id="passwd1">
+						<p></p>
+						<label>确认密码</label>
+		            	<input class="form-control" type="password" id="passwd2">
+		            	<p></p>
+					    <div style="width:20%; margin:0 auto; text-align:middle;">
+            				<label class="hvr-sweep-to-right">
+				           		<input id="modifyIdInfoBtn" type="button" value="确定">
+				    		</label>
+				    	</div>
+				    	<p></p>
+				    	<div id="modifyIdInfoInfo"></div>
+	            	</form>
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modifyVenueInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">场馆信息</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="modal-form-info">
+	            	<form class="form-inline" role="form" method="post" id="update_form">
+	            		<label>场馆名称</label> <input type="text" class="text" name="vname">
+	            		<p></p>
+	            		<label>所在省市</label>
+			        	<div id="distpicker1">
+					   		<select style="color:rgb(169,169,169);border-color: rgb(238,238,238);" name="province"></select>
+							<select style="color:rgb(169,169,169);border-color: rgb(238,238,238);" name="city"></select>
+							<select style="color:rgb(169,169,169);border-color: rgb(238,238,238);" name="area"></select>
+						</div>
+						<p></p>
+						<label>场馆地址</label> <input type="text" class="text" name="address">
+						<p></p>
+						<label>VIP类座位排数</label> <input style="width:50px;" type="text" class="text" name="seatVipRowNum">
+						<label>VIP类座位列数</label> <input style="width:50px;" type="text" class="text" name="seatVipColNum">
+						<p></p>
+						<label>A类座位排数</label> <input style="width:50px;" type="text" class="text" name="seatARowNum">
+						<label>A类座位列数</label> <input style="width:50px;" type="text" class="text" name="seatAColNum">
+						<p></p>
+						<label>B类座位排数</label> <input style="width:50px;" type="text" class="text" name="seatBRowNum">
+						<label>B类座位列数</label> <input style="width:50px;" type="text" class="text" name="seatBColNum">
+						<p></p>
+						<label>C类座位排数</label> <input style="width:50px;" type="text" class="text" name="seatCRowNum">
+						<label>C类座位列数</label> <input style="width:50px;" type="text" class="text" name="seatCColNum">
+						<p></p>
+						<label>D类座位排数</label> <input style="width:50px;" type="text" class="text" name="seatDRowNum">
+						<label>D类座位列数</label> <input style="width:50px;" type="text" class="text" name="seatDColNum">
+						<label class="hvr-sweep-to-right" style="margin-top: 10px; margin-left:150px;">
+							<input id="modifyVenueInfoBtn" type="button" value="提交更新申请">
+						</label>
+		            </form>
+	            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$("#distpicker1").distpicker({
+	autoSelect:false
+});
+</script>
+
+<div class="header">
+	<div class="container">
+		<div class="logo">
+			<h1><a href="http://localhost:8080/Tickets/home?pageId=0">Tickets</a></h1>
+		</div>
+		<div class="top-nav">
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange1"><i class="glyphicon glyphicon-user"> </i>场馆</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="" id="havetochange2">0000001</a></li>
+			</ul>
+			<ul class="right-icons">
+				<li><a  href="http://localhost:8080/Tickets/logout" id="havetochange3">退出登录</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>	
+</div>
+
+<div class="login-right">
+	<div class="container">
+		<h3>场馆设置</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-2" id="myScrollspy">
+    	<ul class="nav nav-tabs nav-stacked" id="myNav">
+        	<li class="active"><a href="venueSetting.html">场馆设置</a></li>
+        	<li><a href="venueReleasePlan.html">发布计划</a></li>
+        	<li><a href="venueSearchPerformance.html">演出售票</a></li>
+        	<li><a href="venueCheckIn.html">演出检票</a></li>
+        	<li><a href="venueStatistics.html">统计信息</a></li>
+    	</ul>
+	</div>
+	<div class="col-xs-9" id="myShowPanel">
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>账号信息</label>
+        		<a href='#' data-toggle='modal' data-target='#modifyIdInfo' id="modifyIdInfoHref"  style="margin-left:560px;">修改账号信息</a>
+   			</div>
+	    	<div class="panel-body">
+	    		<div style="margin-bottom:10px;">
+	        		<label style="margin-right:10px;">场馆编号：</label><span id="vid_show" class="text"></span>
+	        	</div>
+				<div style="margin-bottom:10px;">
+					<label style="margin-right:10px;">登录密码：</label><span id="vpassword_show" class="password"></span>
+				</div>
+	    	</div>
+		</div>
+		<div class="clearfix" style="height:2em;"></div>
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>场馆信息</label>
+        		<a href='#' data-toggle='modal' data-target='#modifyVenueInfo' id="modifyVenueInfoHref" style="margin-left:560px;">修改场馆信息</a>
+   			</div>
+	    	<div class="panel-body">
+	        	<label>场馆名称： </label><span id="vname_show" class="text"></span>
+	        	<p style="margin-top:10px;"></p>
+           		<label>所在省市：</label><span id="province_show"></span><span id="city_show"></span><span id="area_show"></span>
+				<label style="margin-left:20px;">场馆地址：</label> <span id="address_show" class="text"></span>
+				<p style="margin-top:10px;"></p>
+				<label>VIP类座位排数：</label> <span id="seatVipRowNum_show" class="text"></span>
+				<label style="margin-left:20px;">VIP类座位列数 ：</label><span id="seatVipColNum_show" class="text"></span>
+				<p style="margin-top:10px;"></p>
+				<label>A类座位排数：</label><span id="seatARowNum_show" class="text"></span>
+				<label style="margin-left:20px;">A类座位列数：</label><span id="seatAColNum_show" class="text"></span>
+				<p style="margin-top:10px;"></p>
+				<label>B类座位排数：</label><span id="seatBRowNum_show" class="text"></span>
+				<label style="margin-left:20px;">B类座位列数：</label><span id="seatBColNum_show" class="text"></span>
+				<p style="margin-top:10px;"></p>
+				<label>C类座位排数：</label><span id="seatCRowNum_show" class="text"></span>
+				<label style="margin-left:20px;">C类座位列数：</label><span id="seatCColNum_show" class="text"></span>
+				<p style="margin-top:10px;"></p>
+				<label >D类座位排数：</label><span id="seatDRowNum_show" class="text"></span>
+				<label style="margin-left:20px;">D类座位列数：</label><span id="seatDColNum_show" class="text"></span>
+	    	</div>
+		</div>
+		<div class="clearfix" style="height:2em;"></div>
+		<div class="panel panel-default" style="width:80%; margin:auto;">
+    		<div class="panel-heading">
+        		<label>账户信息</label>
+   			</div>
+	    	<div class="panel-body">
+		    	<div style="margin-bottom:10px;">
+		        	<label style="margin-right:10px;">账户余额：</label><span id="balance_show" class="text"></span>元
+		        </div>
+	    	</div>
+		</div>
+	</div>
+</div>
+        
+<script>
+$(document).ready(function () {
+	//更新右上角导航
+	$.ajax({
+		url:"http://localhost:8080/Tickets/isAuthorized",
+		"type":"GET",
+		"success": function(data) {
+			if(data != "fail") {//Session中存在已经登录的用户
+				var firstChar = data.substring(0,1);
+				var superId = data.substring(1, 8);
+				if(firstChar == 'V') {//场馆已经登录
+					document.getElementById('havetochange2').innerHTML = superId;
+				}
+			}
+			else{//没有登录用户，跳转到场馆登录页面
+				window.location.href="/Tickets/home?pageId=16";
+			}
+		},
+		"error":function(data) {//出现错误，跳转到场馆登录页面
+			window.location.href="/Tickets/home?pageId=16";
+		}
+	});
+	
+	//更新账号信息、场馆信息和账户信息
+	$.ajax({
+		url:"http://localhost:8080/Tickets/venueShowVenueDetail",
+		"type":"GET",
+		"dataType":"json",
+        "async":false,
+		"success": function(data) {
+			if(data != "fail") {//场馆信息存在
+				var dataValue = eval(data);
+
+	            document.getElementById("vid_show").innerHTML = dataValue.vid;
+	            document.getElementById("vpassword_show").innerHTML = dataValue.vPasswd;
+				document.getElementById("vname_show").innerHTML = dataValue.vname;
+	            document.getElementById("province_show").innerHTML = dataValue.province;
+	            document.getElementById("city_show").innerHTML = dataValue.city;
+	            document.getElementById("area_show").innerHTML = dataValue.area;
+	            document.getElementById("address_show").innerHTML = dataValue.address;
+	            document.getElementById("seatVipRowNum_show").innerHTML = dataValue.seatVipRowNum;
+	            document.getElementById("seatVipColNum_show").innerHTML = dataValue.seatVipColNum;
+	            document.getElementById("seatARowNum_show").innerHTML = dataValue.seatARowNum;
+	            document.getElementById("seatAColNum_show").innerHTML = dataValue.seatAColNum;
+	            document.getElementById("seatBRowNum_show").innerHTML = dataValue.seatBRowNum;
+	            document.getElementById("seatBColNum_show").innerHTML = dataValue.seatBColNum;
+	            document.getElementById("seatCRowNum_show").innerHTML = dataValue.seatCRowNum;
+	            document.getElementById("seatCColNum_show").innerHTML = dataValue.seatCColNum;
+	            document.getElementById("seatDRowNum_show").innerHTML = dataValue.seatDRowNum;
+	            document.getElementById("seatDColNum_show").innerHTML = dataValue.seatDColNum;
+	            document.getElementById("balance_show").innerHTML = dataValue.balance;
+			}
+		},
+		"error":function(data) {
+		}
+	});
+	
+	//当点击“修改账号信息”时，模态框对应的操作
+	$('#modifyIdInfo').on('show.bs.modal', function() {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/venueShowVenueDetail",
+	        "type":"GET",
+			"dataType":"json",
+	        "async":false,
+	        success:function (data){
+	        	if(data != "fail") {//场馆信息存在
+					var dataValue = eval(data);
+		            document.getElementById("vid").innerHTML = dataValue.vid;
+				}
+	        }
+	    });
+	});	
+	
+	//“修改账号信息”按钮点击事件
+	$('#modifyIdInfoBtn').click(function() {
+		if($('#passwd1').val() == undefined || $('#passwd2').val() == undefined) {
+			document.getElementById('modifyIdInfoInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">请填写完整的新密码！</div>';
+		}
+		else if($('#passwd1').val() != $('#passwd2').val()) {
+			document.getElementById('modifyIdInfoInfo').innerHTML='<div class="alert alert-danger" role="alert" style="text-align: center">请保证两次输入的密码一致！</div>';
+		}
+		else{
+		    $.ajax({
+		        url:"http://localhost:8080/Tickets/venueResetPassword",
+		        type:"POST",
+		        data:{"passwd":$('#passwd1').val()},
+		        success:function (data) {
+		        	if(data == "success") {
+			        	alert("修改成功");
+			        }
+		        	else {
+		        		alert("修改失败,"+data);
+		        	}
+		        	setTimeout('jumpTo(18)',1000);
+		        }
+		    });
+		}
+	});
+	
+	//当点击“修改场馆信息”时，模态框对应的操作
+	$('#modifyVenueInfo').on('show.bs.modal', function() {
+		//这里不做任何操作
+	});
+	
+	//“提交修改申请”按钮点击事件
+	$('#modifyVenueInfoBtn').click(function() {
+	    $.ajax({
+	        url:"http://localhost:8080/Tickets/venueUpdateVenueInfo",
+	        data:$('#update_form').serialize(),
+	        type:"POST",
+	        success:function (data) {
+	        	if(data != "fail"){
+		        	alert("提交成功，场馆更新编号为"+data+"。请耐心等待集团经理审批。");
+		        }
+	        	else {
+	        		alert("提交失败");
+	        	}
+	        	setTimeout('jumpTo(18)',1000);
+	        }
+	    });
+	});
+	
+});
+
+function jumpTo(pageId) {
+    window.location.href="/Tickets/home?pageId="+pageId;
+}
+
+</script>
+</body>
+</html>
